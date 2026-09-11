@@ -164,11 +164,11 @@ export function Login() {
                 )}
 
                 <div className="field">
-                  <label>Téléphone ou email</label>
+                  <label>Email / Téléphone</label>
                   <input
                     type="text"
                     autoComplete="username"
-                    placeholder="+221 77 000 00 00 ou vous@exemple.com"
+                    placeholder="vous@exemple.com ou +221 77 000 00 00"
                     value={identifiant}
                     onChange={(e) => setIdentifiant(e.target.value)}
                   />
