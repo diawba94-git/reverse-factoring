@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
+import { Logo } from "../../components/shell/Logo";
 
 export function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="auth-page">
       <div className="auth-logo">
-        <div className="auth-logo-mark" />
+        <Logo variant="icon" size={30} />
         <div className="auth-logo-text">
           <div className="auth-logo-name">Cedra</div>
           <div className="auth-logo-tagline">AFFACTURAGE INVERSÉ</div>

@@ -14,14 +14,6 @@
   gap: 11px;
 }
 
-.auth-logo-mark {
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-sm);
-  background: var(--color-primary);
-  flex: none;
-}
-
 .auth-logo-text {
   display: flex;
   flex-direction: column;
