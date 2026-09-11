@@ -1,0 +1,102 @@
+/* Ecrans d'onboarding-1/2/3 de cedra-acheteur.html — dans la maquette source ils partagent
+   le shell dashboard (sidebar visible) car exposes comme un raccourci "DEMO" pour previsualiser
+   les 3 etats depuis un compte deja connecte. Ici ils sont le VRAI parcours d'un compte pas
+   encore actif : le rendre sans la sidebar dashboard (a laquelle un tel compte n'a pas encore
+   acces) est plus correct fonctionnellement — voir note de conversion. Scope dedie
+   .cedra-app.role-acheteur-onboarding, sans grille .app/.sidebar. */
+
+.cedra-app.role-acheteur-onboarding{ min-height:100vh; }
+.cedra-app.role-acheteur-onboarding .wrap{max-width:620px; margin:0 auto; padding:40px 24px 60px;}
+.cedra-app.role-acheteur-onboarding .brand{display:flex; align-items:center; gap:10px; margin-bottom:28px;}
+.cedra-app.role-acheteur-onboarding .logout-btn{color:var(--muted);}
+.cedra-app.role-acheteur-onboarding .logout-btn:hover{background:var(--green-soft); color:var(--green-dark);}
+
+.cedra-app.role-acheteur-onboarding .steps{display:flex; align-items:center; gap:6px; margin-bottom:22px; flex-wrap:wrap;}
+.cedra-app.role-acheteur-onboarding .step{display:flex; align-items:center; gap:6px; font-size:11.3px; color:var(--muted); font-weight:600;}
+.cedra-app.role-acheteur-onboarding .step .n{width:19px; height:19px; border-radius:50%; background:#EEF1EF; color:var(--muted); display:flex; align-items:center; justify-content:center; font-size:10px;}
+.cedra-app.role-acheteur-onboarding .step.done .n{background:var(--green); color:#fff;}
+.cedra-app.role-acheteur-onboarding .step.active .n{background:var(--green); color:#fff;}
+.cedra-app.role-acheteur-onboarding .step.active{color:var(--ink);}
+.cedra-app.role-acheteur-onboarding .step.pending .n{background:#FBF0E1; color:var(--amber);}
+.cedra-app.role-acheteur-onboarding .step-sep{width:20px; height:1px; background:var(--line);}
+
+.cedra-app.role-acheteur-onboarding .card{background:var(--white); border:1px solid var(--line); border-radius:12px; padding:28px; margin-bottom:16px;}
+.cedra-app.role-acheteur-onboarding .card h1{font-size:19px; font-weight:600; margin:0 0 6px;}
+.cedra-app.role-acheteur-onboarding .card .sub{font-size:12.5px; color:var(--muted); margin:0 0 20px;}
+
+.cedra-app.role-acheteur-onboarding .context-box{
+  display:flex; gap:10px; background:var(--green-soft); border-radius:8px; padding:12px 14px; margin-bottom:20px; font-size:12px; color:var(--green-dark);
+}
+.cedra-app.role-acheteur-onboarding .context-box svg{width:16px; height:16px; stroke:var(--green); flex-shrink:0; margin-top:1px;}
+
+.cedra-app.role-acheteur-onboarding .section-label{font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:var(--muted); margin:22px 0 12px;}
+.cedra-app.role-acheteur-onboarding .section-label:first-of-type{margin-top:0;}
+
+.cedra-app.role-acheteur-onboarding .field{margin-bottom:14px;}
+.cedra-app.role-acheteur-onboarding .field label{display:block; font-size:11.8px; font-weight:600; margin-bottom:5px;}
+.cedra-app.role-acheteur-onboarding .field label .req{color:var(--red);}
+.cedra-app.role-acheteur-onboarding .field .hint{font-size:10.8px; color:var(--muted); margin-top:4px;}
+.cedra-app.role-acheteur-onboarding .field input, .cedra-app.role-acheteur-onboarding .field select{width:100%; border:1px solid var(--line); border-radius:7px; padding:10px 12px; font-size:13px; font-family:inherit; background:var(--white); color:var(--ink);}
+.cedra-app.role-acheteur-onboarding .field input:focus, .cedra-app.role-acheteur-onboarding .field select:focus{border-color:var(--green); outline:none;}
+.cedra-app.role-acheteur-onboarding .row-2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+
+.cedra-app.role-acheteur-onboarding .validator-slot{
+  display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--line); border-radius:9px; margin-bottom:10px;
+}
+.cedra-app.role-acheteur-onboarding .validator-slot .avatar{width:36px; height:36px; border-radius:50%; background:var(--green-soft); color:var(--green); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;}
+.cedra-app.role-acheteur-onboarding .validator-slot .info b{font-size:13px;}
+.cedra-app.role-acheteur-onboarding .validator-slot .info .role{font-size:11px; color:var(--muted);}
+.cedra-app.role-acheteur-onboarding .validator-slot.empty{border-style:dashed; color:var(--muted); justify-content:center;}
+.cedra-app.role-acheteur-onboarding .tag-done{margin-left:auto; font-size:10.5px; font-weight:600; color:var(--green); background:var(--green-soft); padding:2px 9px; border-radius:20px;}
+
+.cedra-app.role-acheteur-onboarding .blocking-note{
+  display:flex; gap:10px; background:#FBF0E1; color:#7A5321; border-radius:8px; padding:12px 14px; font-size:11.8px; margin-top:6px;
+}
+.cedra-app.role-acheteur-onboarding .blocking-note svg{width:16px; height:16px; stroke:var(--amber); flex-shrink:0; margin-top:1px;}
+
+.cedra-app.role-acheteur-onboarding .upload-row{
+  display:flex; align-items:center; justify-content:space-between; border:1px dashed var(--line); border-radius:8px; padding:12px 14px; margin-bottom:9px;
+}
+.cedra-app.role-acheteur-onboarding .upload-row .lbl{display:flex; align-items:center; gap:9px; font-size:12.5px;}
+.cedra-app.role-acheteur-onboarding .upload-row .lbl svg{width:16px; height:16px; stroke:var(--muted);}
+.cedra-app.role-acheteur-onboarding .upload-row .lbl b{font-weight:600;}
+.cedra-app.role-acheteur-onboarding .upload-row .req-tag{font-size:10px; color:var(--red); font-weight:600;}
+.cedra-app.role-acheteur-onboarding .upload-btn{font-size:11.5px; font-weight:600; color:var(--green); background:var(--green-soft); border:none; border-radius:6px; padding:6px 12px; cursor:pointer;}
+
+.cedra-app.role-acheteur-onboarding .conditional-note{
+  display:flex; gap:9px; background:#EFF4F1; border-radius:7px; padding:10px 12px; font-size:11.3px; color:var(--muted); margin-bottom:14px;
+}
+.cedra-app.role-acheteur-onboarding .conditional-note svg{width:14px; height:14px; stroke:var(--muted); flex-shrink:0; margin-top:1px;}
+
+.cedra-app.role-acheteur-onboarding .btn-primary{width:100%; background:var(--green); color:#fff; border:none; border-radius:8px; padding:12px; font-size:13.5px; font-weight:600; cursor:pointer;}
+.cedra-app.role-acheteur-onboarding .btn-primary:disabled{background:#B9CBC1; cursor:not-allowed;}
+.cedra-app.role-acheteur-onboarding .btn-secondary{width:100%; background:var(--white); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:11px; font-size:13px; font-weight:600; cursor:pointer; margin-top:8px;}
+
+.cedra-app.role-acheteur-onboarding .pending-state{text-align:center; padding:20px 10px;}
+.cedra-app.role-acheteur-onboarding .pending-ic{width:56px; height:56px; border-radius:50%; background:var(--green-soft); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;}
+.cedra-app.role-acheteur-onboarding .pending-ic svg{width:26px; height:26px; stroke:var(--green);}
+.cedra-app.role-acheteur-onboarding .card.pending-card{text-align:center;}
+.cedra-app.role-acheteur-onboarding .pending-ic.amber{background:#FBF0E1;}
+.cedra-app.role-acheteur-onboarding .pending-ic.amber svg{stroke:var(--amber);}
+
+.cedra-app.role-acheteur-onboarding .summary{
+  text-align:left; background:#FBFCFB; border:1px solid var(--line); border-radius:9px; padding:16px 18px; margin-bottom:22px;
+}
+.cedra-app.role-acheteur-onboarding .summary .row{display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid #EEF2EF; font-size:12.3px;}
+.cedra-app.role-acheteur-onboarding .summary .row:last-child{border-bottom:none;}
+.cedra-app.role-acheteur-onboarding .summary .row span:first-child{color:var(--muted);}
+.cedra-app.role-acheteur-onboarding .summary .row span:last-child{font-weight:600;}
+.cedra-app.role-acheteur-onboarding .status-pill{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; background:#FBF0E1; color:var(--amber);}
+
+.cedra-app.role-acheteur-onboarding .timeline{text-align:left; margin-bottom:8px;}
+.cedra-app.role-acheteur-onboarding .t-item{display:flex; gap:11px; padding:9px 0;}
+.cedra-app.role-acheteur-onboarding .t-dot{width:9px; height:9px; border-radius:50%; margin-top:4px; flex-shrink:0;}
+.cedra-app.role-acheteur-onboarding .t-dot.done{background:var(--green);}
+.cedra-app.role-acheteur-onboarding .t-dot.pending{background:#D8C9A8;}
+.cedra-app.role-acheteur-onboarding .t-item .lbl{font-size:12.3px; font-weight:600;}
+.cedra-app.role-acheteur-onboarding .t-item .time{font-size:10.8px; color:var(--muted); margin-top:1px;}
+
+.cedra-app.role-acheteur-onboarding .error-box{
+  display:flex; gap:9px; background:#F7DCD8; color:#8C2E22; border-radius:8px; padding:11px 13px; font-size:11.8px; margin-bottom:16px;
+}
+.cedra-app.role-acheteur-onboarding .error-box svg{width:15px; height:15px; stroke:#8C2E22; flex-shrink:0; margin-top:1px;}

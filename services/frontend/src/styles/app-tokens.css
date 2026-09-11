@@ -1,0 +1,58 @@
+/* Jeu de variables et règles de base partagé tel quel par cedra-login.html,
+   cedra-admin.html, cedra-pme.html, cedra-acheteur.html et cedra-partenaire.html.
+   Scopé sous .cedra-app pour ne jamais fuiter vers la page Landing (palette
+   différente) au sein de la même SPA. */
+.cedra-app{
+  --green:#157A52; --green-dark:#0B3D26; --green-soft:#E4F1EA;
+  --amber:#C98A3A; --blue:#3B6FA8; --violet:#6B5B95;
+  --ink:#16241D; --muted:#5C6B63; --line:#DCE6DF; --bg:#F5F7F5; --white:#FFFFFF; --red:#B4483A;
+
+  color:var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:13.5px;
+  line-height:1.45;
+}
+.cedra-app .mono{font-family:'IBM Plex Mono',monospace;}
+.cedra-app svg.ic{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0;}
+.cedra-app :focus-visible{outline:2px solid var(--green); outline-offset:2px;}
+@media (prefers-reduced-motion: reduce){ .cedra-app *{transition:none !important;} }
+
+/* Navigation mobile (menu hamburger) — identique dans les 4 maquettes de dashboard,
+   partagée ici une seule fois puisque DashboardShell est le composant commun aux 4 rôles. */
+.cedra-app .hamburger-btn{
+  display:none; position:fixed; top:14px; left:14px; z-index:70;
+  width:38px; height:38px; border-radius:9px; background:var(--green-dark); border:none;
+  align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+.cedra-app .hamburger-btn svg{width:18px; height:18px; stroke:#fff; fill:none; stroke-width:2; stroke-linecap:round;}
+.cedra-app .sidebar-backdrop{display:none; position:fixed; inset:0; background:rgba(11,61,38,.45); z-index:55;}
+.cedra-app .sidebar-backdrop.show{display:block;}
+@media (max-width:960px){
+  .cedra-app .hamburger-btn{display:flex;}
+}
+
+/* Pagination — identique dans les 4 maquettes de dashboard */
+.cedra-app .pagination{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:12px 16px; border-top:1px solid var(--line); font-size:11.8px; color:var(--muted); flex-wrap:wrap;
+}
+.cedra-app .pagination .pages{display:flex; align-items:center; gap:4px;}
+.cedra-app .page-btn{
+  min-width:28px; height:28px; border-radius:6px; border:1px solid var(--line); background:var(--white);
+  color:var(--ink); font-size:11.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0 6px;
+  font-family:inherit;
+}
+.cedra-app .page-btn.active{background:var(--green); border-color:var(--green); color:#fff; font-weight:600;}
+.cedra-app .page-btn:disabled{opacity:.4; cursor:not-allowed;}
+.cedra-app .page-btn:not(:disabled):not(.active):hover{border-color:var(--green); color:var(--green);}
+.cedra-app .page-ellipsis{color:var(--muted); padding:0 2px;}
+.cedra-app .per-page-select{border:1px solid var(--line); border-radius:6px; padding:5px 8px; font-size:11.5px; font-family:inherit; background:var(--white); color:var(--ink);}
+
+/* Déconnexion — icône en haut de la sidebar, à côté du logo, commune aux 4 rôles */
+.cedra-app .logout-btn{
+  margin-left:auto; flex-shrink:0; width:26px; height:26px; border-radius:6px;
+  background:none; border:none; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:#9FC7AE;
+}
+.cedra-app .logout-btn:hover{background:rgba(255,255,255,0.1); color:#fff;}
+.cedra-app .logout-btn svg{width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;}

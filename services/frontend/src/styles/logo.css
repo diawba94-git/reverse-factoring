@@ -1,0 +1,37 @@
+/* Composant de marque Cedra partage (Logo.tsx). Regles auto-suffisantes (n'heritent pas
+   des tokens par-page) pour que le composant reste correct partout ou il est utilise :
+   landing (fond clair), login (panneau vert fonce), sidebars des 4 dashboards. */
+
+.cedra-logo {
+  display: inline-flex;
+  align-items: center;
+}
+
+.cedra-logo-icon svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.cedra-logo-full {
+  gap: 9px;
+}
+
+.cedra-logo-wordmark {
+  position: relative;
+  font-family: 'IBM Plex Serif', serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  color: inherit;
+}
+
+.cedra-logo-wordmark::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 70%;
+  height: 2.5px;
+  background: #C98A3A;
+  border-radius: 2px;
+}

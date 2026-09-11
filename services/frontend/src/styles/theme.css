@@ -1,0 +1,81 @@
+:root {
+  --color-primary: #157a52;
+  --color-primary-hover: #11633f;
+  --color-primary-dark: #0f5c3d;
+  --color-primary-tint-bg: #f5faf8;
+  --color-primary-tint-border: #cfe6db;
+
+  --color-text: #232b2e;
+  --color-text-secondary: #4c5559;
+  --color-text-muted: #78868a;
+  --color-text-faint: #8b969a;
+  --color-text-footer: #a0aaad;
+
+  --color-border: #dbe2e2;
+  --color-border-strong: #e3e8e8;
+  --color-border-input-error: #e0b3a2;
+
+  --color-bg: #f4f6f6;
+  --color-bg-card: #ffffff;
+  --color-bg-subtle: #fafbfb;
+  --color-divider: #f2f5f5;
+
+  --color-error-border: #f0d9cf;
+  --color-error-bg: #fbe9e4;
+  --color-error-text: #8c3218;
+
+  --color-success-text: #0f5c3d;
+
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 7px;
+  --radius-xs: 4px;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input {
+  font-family: inherit;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+::selection {
+  background: var(--color-primary-tint-border);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

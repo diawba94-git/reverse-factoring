@@ -1,0 +1,234 @@
+/* Regles propres a cedra-admin.html (Dashboard / Fusion des doublons / Litiges),
+   scopees sous .cedra-app.role-admin. Consolidees a partir des 3 blocs <style>
+   dupliques dans la maquette source (dashboard/doublons/litiges) : quand une regle
+   differait entre blocs, la valeur de la derniere occurrence dans le fichier source
+   est retenue (c'est elle qui l'emporte reellement dans la cascade CSS de la
+   maquette, les 3 vues partageant une seule feuille de style). */
+
+.cedra-app.role-admin{ line-height:1.5; }
+
+.cedra-app.role-admin .app{display:grid; grid-template-columns:224px 1fr; min-height:100vh;}
+.cedra-app.role-admin .app > div{min-width:0;}
+.cedra-app.role-admin main{min-width:0;}
+@media (max-width:960px){
+  .cedra-app.role-admin .app{grid-template-columns:minmax(0,1fr);}
+  .cedra-app.role-admin .sidebar{
+    display:flex !important; position:fixed; top:0; left:0; height:100vh; width:248px; z-index:60;
+    transform:translateX(-100%); transition:transform .25s ease; box-shadow:4px 0 24px rgba(0,0,0,.2);
+  }
+  .cedra-app.role-admin .sidebar.open{transform:translateX(0);}
+  .cedra-app.role-admin .topbar{padding-left:64px; flex-wrap:wrap; gap:10px;}
+  .cedra-app.role-admin .topbar-right{flex-wrap:wrap; row-gap:8px;}
+}
+
+.cedra-app.role-admin .sidebar{background:var(--green-dark); color:#CFE6DA; padding:18px 14px; display:flex; flex-direction:column;}
+.cedra-app.role-admin .brand{display:flex; align-items:center; gap:9px; padding:2px 6px 16px;}
+.cedra-app.role-admin .brand-name{color:#fff; font-weight:600; font-size:14.5px;}
+.cedra-app.role-admin .brand-sub{font-size:9.5px; color:#7FC4A0; letter-spacing:1.4px; margin-top:0;}
+.cedra-app.role-admin nav.primary{display:flex; flex-direction:column; gap:1px; margin-bottom:14px;}
+.cedra-app.role-admin .nav-item{display:flex; align-items:center; gap:9px; padding:7px 9px; border-radius:7px; color:#BFDAC9; text-decoration:none; font-size:12.6px; background:none; border:none; width:100%; text-align:left; cursor:pointer; font-family:inherit;}
+.cedra-app.role-admin .nav-item:hover{background:#0F4A2E; color:#fff;}
+.cedra-app.role-admin .nav-item.active{background:var(--green); color:#fff; font-weight:500;}
+.cedra-app.role-admin .nav-item .badge{margin-left:auto; background:#0F4A2E; color:#9FDABB; font-size:10px; font-weight:600; padding:1px 6px; border-radius:20px;}
+.cedra-app.role-admin .side-section-label{font-size:9.5px; letter-spacing:1.3px; color:#5E8A72; margin:10px 9px 4px; font-weight:600;}
+.cedra-app.role-admin .actor-row{display:flex; align-items:center; gap:8px; padding:5px 9px; border-radius:7px; font-size:12.3px; color:#CFE6DA;}
+.cedra-app.role-admin .actor-dot{width:8px; height:8px; border-radius:50%; flex-shrink:0;}
+.cedra-app.role-admin .actor-row .n{margin-left:auto; font-weight:600; color:#fff;}
+.cedra-app.role-admin .sidebar-spacer{flex:1;}
+
+.cedra-app.role-admin .topbar{display:flex; align-items:center; justify-content:space-between; gap:20px; padding:16px 24px; background:var(--white); border-bottom:1px solid var(--line);}
+.cedra-app.role-admin .topbar h1{font-size:18px; font-weight:600; margin:0;}
+.cedra-app.role-admin .topbar .sub{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.cedra-app.role-admin .topbar-right{display:flex; align-items:center; gap:14px;}
+.cedra-app.role-admin select.scope{border:1px solid var(--line); border-radius:7px; padding:6px 10px; font-size:12px; background:var(--white); color:var(--ink); font-family:inherit;}
+.cedra-app.role-admin .icon-btn{width:32px; height:32px; border-radius:8px; border:1px solid var(--line); background:var(--white); display:flex; align-items:center; justify-content:center; position:relative; color:var(--muted);}
+.cedra-app.role-admin .icon-btn .dot{position:absolute; top:-3px; right:-3px; background:var(--red); color:#fff; font-size:9px; font-weight:700; border-radius:20px; padding:1px 4px;}
+.cedra-app.role-admin .avatar{width:30px; height:30px; border-radius:50%; background:var(--green-soft); color:var(--green); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;}
+.cedra-app.role-admin .who{display:flex; align-items:center; gap:8px;}
+.cedra-app.role-admin .who .name{font-size:12.3px; font-weight:600;}
+.cedra-app.role-admin .who .role{font-size:10.5px; color:var(--muted);}
+
+.cedra-app.role-admin main{padding:16px 24px 20px;}
+.cedra-app.role-admin .compliance-banner{display:flex; align-items:center; gap:9px; background:var(--green-soft); color:var(--green-dark); border-radius:8px; padding:8px 14px; font-size:11.8px; margin-bottom:14px;}
+.cedra-app.role-admin .compliance-banner svg.ic{color:var(--green);}
+
+.cedra-app.role-admin .kpi-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:14px;}
+@media (max-width:900px){ .cedra-app.role-admin .kpi-grid{grid-template-columns:1fr 1fr;} }
+.cedra-app.role-admin .kpi-card{background:var(--white); border:1px solid var(--line); border-radius:10px; padding:13px 14px;}
+.cedra-app.role-admin .kpi-top{display:flex; align-items:center; gap:9px; margin-bottom:8px;}
+.cedra-app.role-admin .kpi-ic{width:28px; height:28px; border-radius:7px; display:flex; align-items:center; justify-content:center; color:#fff; flex-shrink:0;}
+.cedra-app.role-admin .kpi-ic svg{width:15px; height:15px; stroke:#fff;}
+.cedra-app.role-admin .kpi-label{font-size:10.2px; color:var(--muted); letter-spacing:0.3px; font-weight:600;}
+.cedra-app.role-admin .kpi-value{font-size:20px; font-weight:700; margin:0 0 2px;}
+.cedra-app.role-admin .kpi-foot{display:flex; align-items:center; justify-content:space-between; margin-top:4px;}
+.cedra-app.role-admin .kpi-delta{font-size:10.8px; color:var(--green); font-weight:600;}
+.cedra-app.role-admin svg.spark{display:block;}
+
+.cedra-app.role-admin .grid-2{display:grid; grid-template-columns:1.15fr 0.85fr; gap:12px; margin-bottom:12px;}
+@media (max-width:960px){ .cedra-app.role-admin .grid-2{grid-template-columns:minmax(0,1fr);} }
+.cedra-app.role-admin .panel{background:var(--white); border:1px solid var(--line); border-radius:10px; padding:15px 16px; overflow-x:auto; min-width:0;}
+.cedra-app.role-admin .panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:11px;}
+.cedra-app.role-admin .panel-head h2{font-size:13.6px; font-weight:600; margin:0;}
+.cedra-app.role-admin .panel-head .sub{font-size:11px; color:var(--muted); margin-top:1px;}
+.cedra-app.role-admin .link-btn{font-size:11.5px; color:var(--green); text-decoration:none; font-weight:600; background:none; border:none; cursor:pointer; font-family:inherit;}
+
+.cedra-app.role-admin .flow{display:flex; align-items:flex-start; justify-content:space-between; gap:4px; margin-bottom:2px;}
+.cedra-app.role-admin .flow-step{display:flex; flex-direction:column; align-items:center; text-align:center; width:100%;}
+.cedra-app.role-admin .flow-ic{width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; margin-bottom:6px;}
+.cedra-app.role-admin .flow-ic svg{width:19px; height:19px; stroke:#fff;}
+.cedra-app.role-admin .flow-title{font-size:11.5px; font-weight:600;}
+.cedra-app.role-admin .flow-sub{font-size:9.8px; color:var(--muted); margin-top:1px; max-width:104px;}
+.cedra-app.role-admin .flow-count{margin-top:5px; font-size:10.2px; font-weight:700; padding:1px 8px; border-radius:20px; color:#fff;}
+.cedra-app.role-admin .flow-arrow{align-self:center; color:#B6C7BC; margin-top:18px;}
+.cedra-app.role-admin .flow-arrow svg{width:16px; height:16px;}
+.cedra-app.role-admin .flow-validation-badge{display:inline-block; margin-top:4px; font-size:8.8px; font-weight:700; color:var(--amber); background:#FBF0E1; padding:2px 6px; border-radius:20px;}
+
+.cedra-app.role-admin table{width:100%; border-collapse:collapse; font-size:12px;}
+.cedra-app.role-admin th{text-align:left; font-size:9.8px; letter-spacing:0.4px; color:var(--muted); font-weight:600; padding:0 8px 6px; border-bottom:1px solid var(--line);}
+.cedra-app.role-admin td{padding:7px 8px; border-bottom:1px solid #EEF2EF; vertical-align:middle;}
+.cedra-app.role-admin tr:last-child td{border-bottom:none;}
+.cedra-app.role-admin td.ref{white-space:nowrap;}
+.cedra-app.role-admin .status{display:inline-flex; align-items:center; gap:4px; font-size:10.3px; font-weight:600; padding:2.5px 8px; border-radius:20px; white-space:nowrap;}
+.cedra-app.role-admin .status.validation{background:#FBF0E1; color:var(--amber);}
+.cedra-app.role-admin .status.validee{background:#E9EEFB; color:var(--blue);}
+.cedra-app.role-admin .status.avancee{background:#E4F1EA; color:var(--green);}
+.cedra-app.role-admin .status.soldee{background:#DCEFE1; color:#1F6B45;}
+.cedra-app.role-admin .status.retard{background:#FBE7E4; color:var(--red);}
+.cedra-app.role-admin .status.litige{background:#F7DCD8; color:#8C2E22;}
+.cedra-app.role-admin .status.brouillon{background:#EEF1EF; color:var(--muted);}
+.cedra-app.role-admin .status.emis{background:#EEF1EF; color:var(--muted);}
+.cedra-app.role-admin .status.rejete{background:#F7DCD8; color:#8C2E22;}
+.cedra-app.role-admin .cheque-flag{display:inline-flex; align-items:center; gap:4px; font-size:10px; color:var(--green); font-weight:600; white-space:nowrap;}
+.cedra-app.role-admin .cheque-flag svg{width:12px; height:12px;}
+
+.cedra-app.role-admin .donut-wrap{display:flex; align-items:center; gap:16px;}
+.cedra-app.role-admin .donut{width:104px; height:104px; border-radius:50%; flex-shrink:0; position:relative;}
+.cedra-app.role-admin .donut-center{position:absolute; inset:16px; background:var(--white); border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.cedra-app.role-admin .donut-center b{font-size:14px;}
+.cedra-app.role-admin .donut-center span{font-size:9px; color:var(--muted);}
+.cedra-app.role-admin .legend{display:flex; flex-direction:column; gap:7px; font-size:11px;}
+.cedra-app.role-admin .legend-item{display:flex; align-items:center; gap:7px;}
+.cedra-app.role-admin .legend-dot{width:8px; height:8px; border-radius:50%; flex-shrink:0;}
+.cedra-app.role-admin .legend-item .amt{margin-left:auto; font-weight:600;}
+
+.cedra-app.role-admin .onb-bar{display:flex; height:9px; border-radius:6px; overflow:hidden; margin:8px 0 8px;}
+.cedra-app.role-admin .onb-bar .seg-pilote{background:var(--amber);}
+.cedra-app.role-admin .onb-bar .seg-signee{background:var(--green);}
+.cedra-app.role-admin .onb-legend{display:flex; gap:16px; font-size:11px; color:var(--muted);}
+.cedra-app.role-admin .onb-legend .dot{width:7px; height:7px; border-radius:50%; display:inline-block; margin-right:4px;}
+
+/* --- doublons --- */
+.cedra-app.role-admin .dup-card{background:var(--white); border:1px solid var(--line); border-radius:10px; padding:18px 20px; margin-bottom:14px;}
+.cedra-app.role-admin .dup-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+.cedra-app.role-admin .dup-head .match{display:flex; align-items:center; gap:7px; font-size:11px; font-weight:600; color:var(--amber); background:#FBF0E1; padding:4px 10px; border-radius:20px;}
+.cedra-app.role-admin .dup-compare{display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:center;}
+.cedra-app.role-admin .dup-entity{border:1px solid var(--line); border-radius:9px; padding:14px;}
+.cedra-app.role-admin .dup-entity.keep{border-color:var(--green); background:var(--green-soft);}
+.cedra-app.role-admin .dup-entity .tag{font-size:10px; font-weight:700; letter-spacing:0.4px; color:var(--muted); margin-bottom:6px;}
+.cedra-app.role-admin .dup-entity.keep .tag{color:var(--green);}
+.cedra-app.role-admin .dup-entity .name{font-size:14px; font-weight:600; margin-bottom:8px;}
+.cedra-app.role-admin .dup-entity .row{display:flex; justify-content:space-between; font-size:11.5px; padding:4px 0; border-top:1px solid rgba(0,0,0,.05);}
+.cedra-app.role-admin .dup-entity .row span:first-child{color:var(--muted);}
+.cedra-app.role-admin .vs-arrow{font-size:18px; color:var(--muted);}
+.cedra-app.role-admin .dup-actions{display:flex; justify-content:flex-end; gap:10px; margin-top:14px;}
+.cedra-app.role-admin .btn-ghost{background:var(--white); color:var(--ink); border:1px solid var(--line); border-radius:7px; padding:8px 14px; font-size:12.3px; font-weight:600; cursor:pointer;}
+.cedra-app.role-admin .btn-merge{background:var(--green); color:#fff; border:none; border-radius:7px; padding:8px 16px; font-size:12.3px; font-weight:600; cursor:pointer;}
+.cedra-app.role-admin .btn-merge:disabled{opacity:0.6; cursor:not-allowed;}
+.cedra-app.role-admin .select-keep{font-size:11px; color:var(--muted); text-align:center; margin-top:8px;}
+.cedra-app.role-admin .select-keep button{background:none; border:none; color:var(--green); font-weight:600; cursor:pointer; text-decoration:underline; font-size:11px; font-family:inherit;}
+.cedra-app.role-admin .empty-state{background:var(--white); border:1px solid var(--line); border-radius:10px; padding:32px; text-align:center; color:var(--muted); font-size:13px;}
+
+/* --- litiges --- */
+.cedra-app.role-admin .filters{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;}
+.cedra-app.role-admin .chip{font-size:11.5px; font-weight:600; padding:6px 13px; border-radius:20px; border:1px solid var(--line); background:var(--white); color:var(--muted); cursor:pointer; font-family:inherit;}
+.cedra-app.role-admin .chip.active{background:var(--green); border-color:var(--green); color:#fff;}
+
+.cedra-app.role-admin .lit-card{background:var(--white); border:1px solid var(--line); border-left:3px solid var(--red); border-radius:10px; padding:16px 20px; margin-bottom:12px;}
+.cedra-app.role-admin .lit-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;}
+.cedra-app.role-admin .lit-head .ref{font-size:11px; color:var(--muted);}
+.cedra-app.role-admin .lit-head .title{font-size:14px; font-weight:600; margin-top:2px;}
+.cedra-app.role-admin .lit-cause{display:inline-flex; align-items:center; gap:5px; font-size:10.8px; font-weight:600; background:#F7DCD8; color:#8C2E22; padding:3px 10px; border-radius:20px;}
+.cedra-app.role-admin .lit-amount{text-align:right;}
+.cedra-app.role-admin .lit-amount .v{font-size:16px; font-weight:700; font-family:'IBM Plex Mono',monospace;}
+.cedra-app.role-admin .lit-amount .l{font-size:10px; color:var(--muted);}
+
+.cedra-app.role-admin .lit-detail{font-size:12px; color:var(--muted); background:#FBFCFB; border-radius:7px; padding:11px 13px; margin-bottom:12px;}
+.cedra-app.role-admin .lit-detail b{color:var(--ink);}
+
+.cedra-app.role-admin .lit-meta{display:flex; gap:20px; font-size:11.3px; color:var(--muted); margin-bottom:12px; flex-wrap:wrap;}
+.cedra-app.role-admin .lit-meta b{color:var(--ink); font-weight:600;}
+
+.cedra-app.role-admin .lit-actions{display:flex; justify-content:flex-end; gap:9px; flex-wrap:wrap;}
+.cedra-app.role-admin .btn-danger{background:var(--red); color:#fff; border:none; border-radius:7px; padding:7px 14px; font-size:12px; font-weight:600; cursor:pointer;}
+.cedra-app.role-admin .btn-primary{background:var(--green); color:#fff; border:none; border-radius:7px; padding:7px 14px; font-size:12px; font-weight:600; cursor:pointer;}
+
+/* --- Ecran Factures (Admin) --- */
+.cedra-app.role-admin .filters-bar{display:flex; gap:8px; align-items:center; margin-bottom:16px; flex-wrap:wrap;}
+.cedra-app.role-admin .search-input{
+  border:1px solid var(--line); border-radius:7px; padding:8px 12px 8px 32px; font-size:12.5px;
+  font-family:inherit; width:260px; background:var(--white) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%235C6B63" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>') no-repeat 10px center;
+  background-size:14px;
+}
+.cedra-app.role-admin .select-filter{border:1px solid var(--line); border-radius:7px; padding:8px 10px; font-size:12.3px; font-family:inherit; background:var(--white); color:var(--ink);}
+.cedra-app.role-admin .facture-master{display:grid; grid-template-columns:1.3fr 1fr; gap:16px; align-items:start;}
+@media (max-width:1100px){ .cedra-app.role-admin .facture-master{grid-template-columns:minmax(0,1fr);} }
+.cedra-app.role-admin .fact-row{cursor:pointer;}
+.cedra-app.role-admin .fact-row:hover{background:#FBFCFB;}
+.cedra-app.role-admin .fact-row.selected{background:var(--green-soft);}
+.cedra-app.role-admin .kv-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:0;}
+.cedra-app.role-admin .kv{padding:9px 0; border-top:1px solid #EEF2EF;}
+.cedra-app.role-admin .kv .l{font-size:10.3px; color:var(--muted); margin-bottom:3px;}
+.cedra-app.role-admin .kv .v{font-size:12.5px; font-weight:600;}
+.cedra-app.role-admin .detail-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;}
+.cedra-app.role-admin .detail-head .ref{font-size:11px; color:var(--muted);}
+.cedra-app.role-admin .detail-head .title{font-size:15px; font-weight:600; margin-top:2px;}
+.cedra-app.role-admin .detail-head .amt{font-size:19px; font-weight:700; font-family:'IBM Plex Mono',monospace; text-align:right;}
+.cedra-app.role-admin .lignes-table{width:100%; font-size:11.8px; border-collapse:collapse; margin-top:10px;}
+.cedra-app.role-admin .lignes-table th{text-align:left; color:var(--muted); font-weight:600; font-size:10px; padding:0 6px 6px; border-bottom:1px solid var(--line);}
+.cedra-app.role-admin .lignes-table td{padding:7px 6px; border-bottom:1px solid #EEF2EF;}
+.cedra-app.role-admin .mini-timeline{margin-top:4px;}
+.cedra-app.role-admin .mt-item{display:flex; gap:9px; padding:7px 0; font-size:11.5px;}
+.cedra-app.role-admin .mt-dot{width:7px; height:7px; border-radius:50%; background:var(--green); margin-top:5px; flex-shrink:0;}
+.cedra-app.role-admin .mt-dot.pending{background:#D8C9A8;}
+.cedra-app.role-admin .mt-item .time{color:var(--muted); font-size:10.3px; margin-left:auto;}
+.cedra-app.role-admin .doc-link{display:inline-flex; align-items:center; gap:6px; font-size:11.8px; color:var(--green); text-decoration:none; font-weight:600; background:var(--green-soft); padding:7px 12px; border-radius:7px; margin-top:10px;}
+.cedra-app.role-admin .mode-tag{font-size:10px; font-weight:600; color:var(--muted); background:#EEF1EF; padding:2px 8px; border-radius:20px;}
+.cedra-app.role-admin .empty-detail{display:flex; align-items:center; justify-content:center; height:340px; color:var(--muted); font-size:12.5px; text-align:center; flex-direction:column; gap:8px;}
+
+/* --- Ecrans Avances / Remboursements / Conventions / Utilisateurs / Grilles (Admin) --- */
+.cedra-app.role-admin .progress-3{display:flex; gap:4px; align-items:center;}
+.cedra-app.role-admin .p3-dot{width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#fff;}
+.cedra-app.role-admin .p3-dot.done{background:var(--green);}
+.cedra-app.role-admin .p3-dot.pending{background:#EEF1EF; color:var(--muted);}
+
+.cedra-app.role-admin .user-row-avatar{width:30px; height:30px; border-radius:50%; background:var(--green-soft); color:var(--green); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;}
+.cedra-app.role-admin .role-tag{font-size:10.3px; font-weight:600; padding:2px 9px; border-radius:20px; background:#EEF1EF; color:var(--muted);}
+.cedra-app.role-admin .role-tag.admin{background:#FBF0E1; color:var(--amber);}
+.cedra-app.role-admin .role-tag.validateur{background:#E9EEFB; color:var(--blue);}
+.cedra-app.role-admin .role-tag.membre{background:var(--green-soft); color:var(--green);}
+.cedra-app.role-admin .role-tag.agent{background:#EFE7F9; color:var(--violet);}
+.cedra-app.role-admin .toggle-active{font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px; border:none; cursor:pointer; font-family:inherit;}
+.cedra-app.role-admin .toggle-active.on{background:var(--green-soft); color:var(--green);}
+.cedra-app.role-admin .toggle-active.off{background:#F7DCD8; color:var(--red);}
+.cedra-app.role-admin .toggle-active:disabled{opacity:0.6; cursor:not-allowed;}
+
+.cedra-app.role-admin .grille-form{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:14px;}
+.cedra-app.role-admin .grille-field label{display:block; font-size:11.5px; font-weight:600; margin-bottom:5px;}
+.cedra-app.role-admin .grille-field input, .cedra-app.role-admin .grille-field select{width:100%; border:1px solid var(--line); border-radius:7px; padding:9px 11px; font-size:13px; font-family:inherit;}
+.cedra-app.role-admin .preview-table{width:100%; font-size:12px; border-collapse:collapse; margin-top:6px;}
+.cedra-app.role-admin .preview-table th{text-align:left; color:var(--muted); font-size:10.3px; font-weight:600; padding:0 8px 6px; border-bottom:1px solid var(--line);}
+.cedra-app.role-admin .preview-table td{padding:7px 8px; border-bottom:1px solid #EEF2EF;}
+.cedra-app.role-admin .preview-table .ok{color:var(--green); font-weight:600;}
+
+/* --- Avoirs & créances (Admin) --- */
+.cedra-app.role-admin .creance-card{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 18px; border:1px solid var(--line); border-left:3px solid var(--amber); border-radius:9px; margin-bottom:10px; flex-wrap:wrap;}
+.cedra-app.role-admin .creance-card .t{font-size:12.8px; font-weight:600;}
+.cedra-app.role-admin .creance-card .d{font-size:11.3px; color:var(--muted); margin-top:2px;}
+.cedra-app.role-admin .creance-card .amt{font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:14px;}
+
+/* --- ecrans reutilises (hors maquette) sous le nouveau shell --- */
+.cedra-app.role-admin .generic-topbar{padding:16px 24px; background:var(--white); border-bottom:1px solid var(--line);}
+.cedra-app.role-admin .generic-topbar h1{font-size:18px; font-weight:600; margin:0;}
+.cedra-app.role-admin .tabs{display:flex; gap:6px; padding:0 24px; background:var(--white); border-bottom:1px solid var(--line);}
+.cedra-app.role-admin .tab-btn{background:none; border:none; padding:12px 4px; margin-right:20px; font-size:13px; font-weight:600; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; font-family:inherit;}
+.cedra-app.role-admin .tab-btn.active{color:var(--green); border-bottom-color:var(--green);}

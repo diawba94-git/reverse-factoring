@@ -1,0 +1,252 @@
+.cedra-landing{
+  --ink:#12241D;
+  --paper:#F3F5F1;
+  --paper-deep:#E7ECE6;
+  --green:#157A52;
+  --green-deep:#0B3D26;
+  --green-line:#C7D8CD;
+  --amber:#CC8B3C;
+  --muted:#526056;
+
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  min-height:100vh;
+}
+html{scroll-behavior:smooth;}
+
+.cedra-landing h1,.cedra-landing h2,.cedra-landing h3,.cedra-landing .serif{font-family:'IBM Plex Serif',serif;}
+.cedra-landing a{color:inherit;}
+.cedra-landing .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+@media (max-width:720px){ .cedra-landing .wrap{padding:0 20px;} }
+
+.cedra-landing :focus-visible{outline:2px solid var(--green); outline-offset:3px;}
+
+@media (prefers-reduced-motion: reduce){
+  .cedra-landing *{transition:none !important;}
+}
+
+/* ---------- Header ---------- */
+.cedra-landing header{
+  position:sticky; top:0; z-index:20;
+  background:rgba(243,245,241,0.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--green-line);
+}
+.cedra-landing .nav{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding:18px 0;
+}
+.cedra-landing .nav-left{display:flex; align-items:flex-end; gap:60px;}
+.cedra-landing .nav-right{display:flex; align-items:center; gap:14px;}
+.cedra-landing .nav-links{display:flex; gap:28px; font-size:18px;}
+.cedra-landing .nav-links a{text-decoration:none; color:var(--ink); font-weight:500;}
+.cedra-landing .nav-links a:hover{color:var(--green);}
+.cedra-landing .btn{
+  display:inline-block;
+  background:var(--green);
+  color:#fff;
+  padding:11px 22px;
+  border-radius:6px;
+  font-size:14.5px;
+  font-weight:600;
+  text-decoration:none;
+  border:1px solid var(--green);
+}
+.cedra-landing .btn:hover{background:var(--green-deep); border-color:var(--green-deep);}
+.cedra-landing .btn-ghost{
+  background:transparent; color:var(--ink); border:1px solid var(--ink);
+}
+.cedra-landing .btn-ghost:hover{background:var(--ink); color:#fff;}
+.cedra-landing .mobile-menu-btn{
+  display:none; align-items:center; justify-content:center; width:38px; height:38px;
+  border-radius:8px; border:1px solid var(--green-line); background:#fff; cursor:pointer;
+}
+.cedra-landing .mobile-menu-btn svg{width:18px; height:18px; stroke:var(--ink); fill:none; stroke-width:2; stroke-linecap:round;}
+.cedra-landing .mobile-menu-panel{
+  display:none; flex-direction:column; gap:4px; padding:12px 0 16px;
+  border-top:1px solid var(--green-line);
+}
+.cedra-landing .mobile-menu-panel.open{display:flex;}
+.cedra-landing .mobile-menu-panel a{
+  text-decoration:none; color:var(--ink); font-size:15px; font-weight:500; padding:10px 4px;
+}
+@media (max-width:720px){
+  .cedra-landing .nav-links{display:none;}
+  .cedra-landing .mobile-menu-btn{display:flex;}
+}
+
+/* ---------- Hero ---------- */
+.cedra-landing .hero{padding:80px 0 60px;}
+.cedra-landing .hero-grid{
+  display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:center;
+}
+@media (max-width:900px){ .cedra-landing .hero-grid{grid-template-columns:1fr;} }
+.cedra-landing .hero h1{
+  font-size:clamp(34px,5vw,54px);
+  line-height:1.12;
+  font-weight:500;
+  margin:0 0 22px;
+  max-width:15ch;
+}
+.cedra-landing .hero p{
+  font-size:18px; color:var(--muted); max-width:46ch; margin:0 0 30px;
+}
+.cedra-landing .hero-cta{display:flex; gap:14px; flex-wrap:wrap;}
+
+/* invoice motif visual */
+.cedra-landing .invoice-card{
+  background:#fff; border-radius:10px; padding:28px;
+  box-shadow:0 24px 60px -20px rgba(11,61,38,0.25);
+  border:1px solid var(--green-line);
+  position:relative;
+}
+.cedra-landing .invoice-card .row{
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:10px 0; border-bottom:1px solid #EEF2EF; font-size:13.5px;
+}
+.cedra-landing .invoice-card .row:last-child{border-bottom:none;}
+.cedra-landing .invoice-card .row span:first-child{color:var(--muted);}
+.cedra-landing .invoice-card .total{
+  margin-top:14px; padding-top:16px; border-top:2px solid var(--ink);
+  display:flex; justify-content:space-between; align-items:baseline;
+}
+.cedra-landing .invoice-card .total .amount{font-family:'IBM Plex Serif',serif; font-size:26px; color:var(--green);}
+.cedra-landing .invoice-tag{
+  position:absolute; top:-14px; right:24px;
+  background:var(--amber); color:#fff; font-size:12px; font-weight:600;
+  padding:6px 14px; border-radius:5px;
+}
+
+/* ---------- Section labels ---------- */
+.cedra-landing .kicker{font-size:17px; color:var(--green); font-weight:600; margin:0 0 10px;}
+.cedra-landing section{padding:76px 0;}
+/* Le header est sticky (~87px de haut, bordure incluse) : sans cette marge, un clic sur un
+   lien d'ancre (#comment-ca-marche, #pour-qui, #faq, #contact) scrolle la section pile sous
+   le header, qui la recouvre alors et colle le titre contre son bord inferieur. */
+.cedra-landing section[id]{scroll-margin-top:90px;}
+.cedra-landing .section-head{max-width:640px; margin-bottom:52px;}
+.cedra-landing .section-head h2{font-size:clamp(26px,3.4vw,36px); font-weight:500; margin:0; line-height:1.2;}
+
+/* ---------- Persona rows (alternating) ---------- */
+.cedra-landing .persona{
+  display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
+  padding:40px 0; border-top:1px solid var(--green-line);
+}
+.cedra-landing .persona:last-child{border-bottom:1px solid var(--green-line);}
+.cedra-landing .persona.reverse .p-text{order:2;}
+.cedra-landing .persona.reverse .p-visual{order:1;}
+@media (max-width:860px){
+  .cedra-landing .persona,.cedra-landing .persona.reverse{grid-template-columns:1fr;}
+  .cedra-landing .persona.reverse .p-text,.cedra-landing .persona.reverse .p-visual{order:initial;}
+}
+.cedra-landing .p-label{font-size:13px; color:var(--amber); font-weight:600; margin:0 0 8px;}
+.cedra-landing .p-text h3{font-size:24px; font-weight:500; margin:0 0 12px;}
+.cedra-landing .p-text p{color:var(--muted); font-size:15.5px; max-width:42ch; margin:0;}
+.cedra-landing .p-visual{
+  background:var(--paper-deep); border-radius:10px; padding:34px;
+  min-height:180px; display:flex; flex-direction:column; justify-content:center; gap:10px;
+}
+.cedra-landing .p-visual .bar{height:10px; border-radius:5px; background:var(--green-line);}
+.cedra-landing .p-visual .bar.fill{background:var(--green); width:70%;}
+.cedra-landing .p-visual .bar.fill2{background:var(--amber); width:40%;}
+.cedra-landing .p-visual .stat{font-family:'IBM Plex Serif',serif; font-size:34px; color:var(--green-deep);}
+
+/* ---------- Process (legitimate sequence) ---------- */
+.cedra-landing .process{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+  position:relative;
+}
+@media (max-width:860px){ .cedra-landing .process{grid-template-columns:1fr; gap:28px;} }
+.cedra-landing .process-step{
+  padding:0 24px 0 0; position:relative;
+}
+.cedra-landing .process-step:not(:last-child){border-right:1px solid var(--green-line);}
+@media (max-width:860px){ .cedra-landing .process-step:not(:last-child){border-right:none; border-bottom:1px solid var(--green-line); padding-bottom:24px;} }
+.cedra-landing .process-num{
+  font-family:'IBM Plex Serif',serif; font-size:15px; color:var(--amber);
+  margin:0 0 14px;
+}
+.cedra-landing .process-step h4{font-size:17px; font-weight:600; margin:0 0 8px;}
+.cedra-landing .process-step p{font-size:14px; color:var(--muted); margin:0;}
+
+/* ---------- Trust / risk ---------- */
+.cedra-landing .trust{
+  display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:flex-start;
+}
+@media (max-width:860px){ .cedra-landing .trust{grid-template-columns:1fr; gap:36px;} }
+.cedra-landing .trust-copy h2{font-size:clamp(26px,3.4vw,34px); font-weight:500; line-height:1.25; margin:0 0 18px;}
+.cedra-landing .trust-copy p{color:var(--muted); font-size:15.5px; max-width:44ch;}
+.cedra-landing .stat-row{display:flex; flex-direction:column; gap:26px;}
+.cedra-landing .stat-item{display:flex; align-items:baseline; gap:18px; padding-bottom:22px; border-bottom:1px solid var(--green-line);}
+.cedra-landing .stat-item:last-child{border-bottom:none;}
+.cedra-landing .stat-item .num{font-family:'IBM Plex Serif',serif; font-size:38px; color:var(--green); min-width:110px; white-space:nowrap; flex-shrink:0;}
+@media (max-width:480px){
+  .cedra-landing .stat-item{gap:12px;}
+  .cedra-landing .stat-item .num{font-size:28px; min-width:auto;}
+}
+.cedra-landing .stat-item .label{font-size:14.5px; color:var(--muted);}
+
+/* ---------- FAQ ---------- */
+.cedra-landing .faq{max-width:820px;}
+.cedra-landing details{
+  border-bottom:1px solid var(--green-line);
+  padding:22px 0;
+}
+.cedra-landing summary{
+  cursor:pointer; list-style:none; font-size:17px; font-weight:500;
+  display:flex; justify-content:space-between; align-items:center; gap:20px;
+}
+.cedra-landing summary::-webkit-details-marker{display:none;}
+.cedra-landing summary::after{
+  content:"+"; font-family:'IBM Plex Serif',serif; font-size:22px; color:var(--green);
+  flex-shrink:0;
+}
+.cedra-landing details[open] summary::after{content:"–";}
+.cedra-landing details p{color:var(--muted); font-size:15px; margin:14px 0 0; max-width:65ch;}
+
+/* ---------- Closing CTA ---------- */
+.cedra-landing .closing{background:var(--green-deep); color:#fff; padding:90px 0;}
+.cedra-landing .closing .wrap{display:flex; justify-content:space-between; align-items:center; gap:40px; flex-wrap:wrap;}
+.cedra-landing .closing h2{font-size:clamp(28px,4vw,40px); font-weight:500; margin:0; max-width:14ch; color:#fff;}
+.cedra-landing .closing p{color:#BFDACB; font-size:15.5px; max-width:38ch; margin:14px 0 0;}
+.cedra-landing .closing .btn{background:var(--amber); border-color:var(--amber);}
+.cedra-landing .closing .btn:hover{background:#B77A2E; border-color:#B77A2E;}
+
+/* ---------- Nos promesses (4 bénéfices) ---------- */
+.cedra-landing .promesses-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:28px;}
+@media (max-width:860px){ .cedra-landing .promesses-grid{grid-template-columns:1fr 1fr; gap:32px;} }
+@media (max-width:560px){ .cedra-landing .promesses-grid{grid-template-columns:1fr;} }
+.cedra-landing .promesse-item .p-icon{
+  width:44px; height:44px; border-radius:10px; background:var(--paper-deep);
+  display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+}
+.cedra-landing .promesse-item .p-icon svg{width:22px; height:22px; stroke:var(--green); fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round;}
+.cedra-landing .promesse-item h3{font-size:16px; font-weight:600; margin:0 0 8px;}
+.cedra-landing .promesse-item p{font-size:13.5px; color:var(--muted); margin:0; max-width:32ch;}
+
+/* ---------- Témoignages ---------- */
+.cedra-landing .temoin-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+@media (max-width:900px){ .cedra-landing .temoin-grid{grid-template-columns:1fr;} }
+.cedra-landing .temoin-card{
+  background:#fff; border:1px solid var(--green-line); border-radius:10px; padding:26px;
+  display:flex; flex-direction:column;
+}
+.cedra-landing .temoin-quote{font-family:'IBM Plex Serif',serif; font-size:15px; line-height:1.5; color:var(--ink); margin:0 0 20px; flex:1;}
+.cedra-landing .temoin-quote::before{content:"“"; color:var(--amber); font-size:28px; line-height:0; position:relative; top:8px; margin-right:2px;}
+.cedra-landing .temoin-who{display:flex; align-items:center; gap:11px; padding-top:16px; border-top:1px solid var(--green-line);}
+.cedra-landing .temoin-avatar{
+  width:38px; height:38px; border-radius:50%; background:var(--green); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:600; font-size:14px; flex-shrink:0;
+}
+.cedra-landing .temoin-name{font-size:13.5px; font-weight:600; margin:0;}
+.cedra-landing .temoin-role{font-size:12px; color:var(--muted); margin:0;}
+
+/* ---------- Footer ---------- */
+.cedra-landing footer{padding:40px 0; border-top:1px solid var(--green-line);}
+.cedra-landing footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; font-size:13.5px; color:var(--muted);}
+.cedra-landing footer .foot-links{display:flex; gap:22px;}
+.cedra-landing footer a{text-decoration:none; color:var(--muted);}
+.cedra-landing footer a:hover{color:var(--ink);}

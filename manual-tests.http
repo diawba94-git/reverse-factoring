@@ -1,0 +1,794 @@
+### InvoiceUp — Plan de test manuel (fichier .http, compatible extension VS Code "REST Client")
+### Pre-requis :
+###   1. docker compose up -d
+###   2. docker compose run --rm backend alembic upgrade head
+###   3. docker compose run --rm backend python -m scripts.seed_admin
+###      -> cree l'admin bootstrap : telephone +221770000000 / mot de passe ChangeMoi123!
+### Swagger UI (alternative a ce fichier) : http://localhost:8000/docs
+### Frontend web (Cedra, ecrans de connexion/inscription) : http://localhost:5173
+###
+### NB : /auth/register cree un utilisateur sur une Entreprise EXISTANTE (usage interne/admin).
+### Le frontend utilise /auth/register-entreprise, qui cree l'Entreprise ET son premier
+### utilisateur en une seule operation (voir ANNEXE H) — c'est le flux "Creer un compte".
+###
+### ROLES (revision) : admin | membre_pme | validateur_1 | validateur_2 | agent_financier.
+### La double validation d'une facture est desormais SYSTEMATIQUE et SANS SEUIL DE MONTANT :
+### il faut toujours une validation validateur_1 ET une validation validateur_2 de la meme
+### entreprise donneur d'ordre, dans n'importe quel ordre. Un role ne peut valider qu'une
+### seule fois par facture (meme avec des comptes differents du meme role).
+###
+### Ce fichier suit le cycle complet demande :
+###   creation facture -> double validation -> simulation -> demande d'avance -> approbation
+###   -> remboursement -> versement du solde
+### puis des sections annexes (rejet, invitation, MFA, KYC, tickets, grilles...).
+###
+### Avec l'extension REST Client, chaque requete nommee "# @name x" expose sa reponse
+### via {{x.response.body.$.champ}} dans les requetes suivantes : enchainez-les dans l'ordre.
+
+@baseUrl = http://localhost:8000
+
+### =====================================================================
+### 0. SANTE DE L'API
+### =====================================================================
+
+GET {{baseUrl}}/health
+
+### =====================================================================
+### 1. CONNEXION ADMIN (bootstrap via scripts/seed_admin.py)
+### =====================================================================
+
+# @name loginAdmin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "telephone": "+221770000000",
+  "mot_de_passe": "ChangeMoi123!"
+}
+
+###
+@adminToken = {{loginAdmin.response.body.$.access_token}}
+
+### =====================================================================
+### 2. CREATION DES ENTREPRISES (PME, donneur d'ordre, partenaire financier)
+### =====================================================================
+
+# @name creerPme
+POST {{baseUrl}}/entreprises
+Content-Type: application/json
+
+{
+  "type": "PME",
+  "raison_sociale": "Senegal Fruits SARL",
+  "ninea": "111111111",
+  "secteur_activite": "Agroalimentaire",
+  "date_creation": "2020-01-15",
+  "contact_telephone": "+221771111111",
+  "contact_email": "contact@senegalfruits.sn"
+}
+
+###
+@pmeId = {{creerPme.response.body.$.id}}
+
+# @name creerDonneurOrdre
+POST {{baseUrl}}/entreprises
+Content-Type: application/json
+
+{
+  "type": "GRANDE_ENTREPRISE",
+  "raison_sociale": "Auchan Senegal",
+  "ninea": "222222222",
+  "secteur_activite": "Grande distribution",
+  "date_creation": "2010-05-01",
+  "contact_telephone": "+221772222222",
+  "contact_email": "contact@auchan.sn"
+}
+
+###
+@donneurId = {{creerDonneurOrdre.response.body.$.id}}
+
+# @name creerPartenaire
+POST {{baseUrl}}/entreprises
+Content-Type: application/json
+
+{
+  "type": "PARTENAIRE_FINANCIER",
+  "raison_sociale": "Banque Atlantique",
+  "ninea": "333333333",
+  "secteur_activite": "Finance",
+  "date_creation": "2005-01-01",
+  "contact_telephone": "+221773333333",
+  "contact_email": "contact@banqueatlantique.sn"
+}
+
+###
+@partenaireId = {{creerPartenaire.response.body.$.id}}
+
+### Statut KYC initial attendu : "en_attente". L'admin fait passer les 3 entreprises a "valide"
+### (necessaire notamment pour la section 3.1 ANNEXE I, qui exige une entreprise KYC-validee
+### pour pouvoir inviter) :
+
+PATCH {{baseUrl}}/entreprises/{{pmeId}}/kyc
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "statut_kyc": "valide"
+}
+
+###
+PATCH {{baseUrl}}/entreprises/{{donneurId}}/kyc
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "statut_kyc": "valide"
+}
+
+###
+PATCH {{baseUrl}}/entreprises/{{partenaireId}}/kyc
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "statut_kyc": "valide"
+}
+
+### =====================================================================
+### 3. INSCRIPTION DES UTILISATEURS (usage interne/admin, /auth/register)
+### =====================================================================
+### La double validation etant systematique, il faut DEUX validateurs cote donneur d'ordre
+### (un validateur_1 ET un validateur_2) pour pouvoir valider la moindre facture.
+
+# @name registerMembre
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "entreprise_id": "{{pmeId}}",
+  "role": "membre_pme",
+  "nom": "Fatou Ndiaye",
+  "telephone": "+221774444444",
+  "email": "membre@senegalfruits.sn",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+###
+@pmeToken = {{registerMembre.response.body.$.access_token}}
+
+# @name registerValidateur1
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "entreprise_id": "{{donneurId}}",
+  "role": "validateur_1",
+  "nom": "Ousmane Diop",
+  "telephone": "+221775555555",
+  "email": "validateur1@auchan.sn",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+###
+@validateur1Token = {{registerValidateur1.response.body.$.access_token}}
+
+# @name registerValidateur2
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "entreprise_id": "{{donneurId}}",
+  "role": "validateur_2",
+  "nom": "Aissatou Sow",
+  "telephone": "+221775555556",
+  "email": "validateur2@auchan.sn",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+###
+@validateur2Token = {{registerValidateur2.response.body.$.access_token}}
+
+# @name registerAgent
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "entreprise_id": "{{partenaireId}}",
+  "role": "agent_financier",
+  "nom": "Modou Gueye",
+  "telephone": "+221776666666",
+  "email": "agent@banqueatlantique.sn",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+###
+@agentToken = {{registerAgent.response.body.$.access_token}}
+
+### Verification : le role interne 'admin' ne peut PAS s'auto-inscrire (attendu : 403)
+
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "entreprise_id": "{{pmeId}}",
+  "role": "admin",
+  "nom": "Tentative Admin",
+  "telephone": "+221779999999",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+### Verification : un role hors-type est rejete, ex. tenter 'validateur_1' sur une PME (attendu : 403)
+
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "entreprise_id": "{{pmeId}}",
+  "role": "validateur_1",
+  "nom": "Role Incoherent",
+  "telephone": "+221779999998",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+### =====================================================================
+### 4. GRILLE TARIFAIRE ACTIVE (creee par seed_admin.py) — a defaut, en creer une
+### =====================================================================
+
+GET {{baseUrl}}/grilles-tarifaires/actives
+
+### Si la liste est vide, creer une grille (admin uniquement) :
+
+POST {{baseUrl}}/grilles-tarifaires
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "nom": "Grille standard",
+  "pourcentage": 0.02,
+  "plafond_montant": 500000,
+  "duree_minimum_jours": 45,
+  "taux_avance": 0.90,
+  "repartition_partenaire": 0.70,
+  "repartition_plateforme": 0.30,
+  "active": true,
+  "date_debut_validite": "2026-01-01"
+}
+
+### =====================================================================
+### 5. SIMULATION DE FRAIS (avant creation de facture, cote PME)
+### =====================================================================
+
+POST {{baseUrl}}/simulation/frais
+Content-Type: application/json
+Authorization: Bearer {{pmeToken}}
+
+{
+  "montant": 1000000,
+  "duree_jours": 61
+}
+
+### Garde-fou attendu : duree < duree_minimum_jours -> 400
+
+POST {{baseUrl}}/simulation/frais
+Content-Type: application/json
+Authorization: Bearer {{pmeToken}}
+
+{
+  "montant": 1000000,
+  "duree_jours": 20
+}
+
+### =====================================================================
+### 6. CREATION DE LA FACTURE (role membre_pme uniquement)
+### =====================================================================
+
+# @name creerFacture
+POST {{baseUrl}}/factures
+Content-Type: application/json
+Authorization: Bearer {{pmeToken}}
+
+{
+  "numero_facture": "FAC-2026-001",
+  "donneur_ordre_id": "{{donneurId}}",
+  "montant": 1000000,
+  "date_emission": "2026-08-22",
+  "date_echeance": "2026-10-22",
+  "piece_justificative_url": "https://example.com/facture.pdf",
+  "description": "Livraison fruits aout 2026"
+}
+
+###
+@factureId = {{creerFacture.response.body.$.id}}
+
+### Verification : un validateur_1 ne peut pas creer de facture (attendu : 403)
+
+POST {{baseUrl}}/factures
+Content-Type: application/json
+Authorization: Bearer {{validateur1Token}}
+
+{
+  "numero_facture": "FAC-INTERDIT",
+  "donneur_ordre_id": "{{donneurId}}",
+  "montant": 100000,
+  "date_emission": "2026-08-22",
+  "date_echeance": "2026-10-22",
+  "piece_justificative_url": "https://example.com/x.pdf"
+}
+
+### Liste des factures de la PME (filtrage automatique par entreprise)
+
+GET {{baseUrl}}/factures?statut=emise
+Authorization: Bearer {{pmeToken}}
+
+### =====================================================================
+### 7. DOUBLE VALIDATION DE LA FACTURE — systematique, sans seuil de montant
+### =====================================================================
+### Il faut TOUJOURS une validation validateur_1 ET une validation validateur_2, quel que
+### soit le montant. L'ordre n'a pas d'importance (on valide ici avec validateur_2 d'abord,
+### pour verifier explicitement que l'ordre inverse fonctionne aussi bien).
+
+### 1ere validation (validateur_2) -> statut attendu "validation_complementaire_requise",
+### avec premiere_validation.nom = "Aissatou Sow" et role_validateur = "validateur_2"
+
+POST {{baseUrl}}/factures/{{factureId}}/valider
+Content-Type: application/json
+Authorization: Bearer {{validateur2Token}}
+
+{
+  "commentaire": "Facture conforme, cote finance"
+}
+
+### Un 2eme validateur_2 (meme un compte different) serait rejete ici (attendu : 400) —
+### teste plus bas dans l'ANNEXE A avec un compte validateur_1 dedie.
+
+### 2eme validation (validateur_1, role complementaire) -> statut attendu "validee"
+
+POST {{baseUrl}}/factures/{{factureId}}/valider
+Content-Type: application/json
+Authorization: Bearer {{validateur1Token}}
+
+{
+  "commentaire": "Facture conforme, cote logistique"
+}
+
+### Statut attendu : "validee", premiere_validation absent (null) une fois pleinement validee.
+### Un GET confirme :
+
+GET {{baseUrl}}/factures/{{factureId}}
+Authorization: Bearer {{validateur1Token}}
+
+### =====================================================================
+### 8. DEMANDE D'AVANCE (role membre_pme, sur facture validee)
+### =====================================================================
+
+# @name demanderAvance
+POST {{baseUrl}}/avances
+Content-Type: application/json
+Authorization: Bearer {{pmeToken}}
+
+{
+  "facture_id": "{{factureId}}",
+  "partenaire_financier_id": "{{partenaireId}}",
+  "methode_versement": "virement_bancaire"
+}
+
+###
+@avanceId = {{demanderAvance.response.body.$.id}}
+
+### Statut attendu : "en_attente_validation". Verifier les montants calcules (montant_avance_initial,
+### frais_total, montant_solde_du, taeg_annualise) contre le resultat de la simulation a l'etape 5.
+
+GET {{baseUrl}}/avances/{{avanceId}}
+Authorization: Bearer {{agentToken}}
+
+### =====================================================================
+### 9. APPROBATION DE L'AVANCE (role agent_financier)
+### =====================================================================
+
+POST {{baseUrl}}/avances/{{avanceId}}/approuver
+Authorization: Bearer {{agentToken}}
+
+### Statut avance attendu : "avance_versee", date_versement_initial renseignee.
+### Statut facture attendu : "avance_versee" egalement :
+
+GET {{baseUrl}}/factures/{{factureId}}
+Authorization: Bearer {{pmeToken}}
+
+### =====================================================================
+### 10. REMBOURSEMENT (le donneur d'ordre paie a l'echeance, enregistre par l'agent)
+### =====================================================================
+### Montant attendu = montant_solde_du de l'avance (80 000 FCFA avec la grille standard)
+
+# @name creerRemboursement
+POST {{baseUrl}}/remboursements
+Content-Type: application/json
+Authorization: Bearer {{agentToken}}
+
+{
+  "avance_id": "{{avanceId}}",
+  "montant_recu": 80000,
+  "date_reception": "2026-10-20",
+  "source_entreprise_id": "{{donneurId}}"
+}
+
+###
+@remboursementId = {{creerRemboursement.response.body.$.id}}
+
+### =====================================================================
+### 11. RAPPROCHEMENT -> DECLENCHE LE VERSEMENT DU SOLDE
+### =====================================================================
+### Sans corps de requete : le rapprochement est automatique (comparaison montant_recu
+### vs montant_solde_du). Ici les montants correspondent -> statut "rapproche".
+
+POST {{baseUrl}}/remboursements/{{remboursementId}}/rapprocher
+Authorization: Bearer {{agentToken}}
+
+### Verifications finales : avance "soldee", facture "soldee"
+
+GET {{baseUrl}}/avances/{{avanceId}}
+Authorization: Bearer {{agentToken}}
+
+###
+GET {{baseUrl}}/factures/{{factureId}}
+Authorization: Bearer {{pmeToken}}
+
+### =====================================================================
+### 12. DASHBOARDS (agregation, un par role)
+### =====================================================================
+
+GET {{baseUrl}}/dashboard/pme/{{pmeId}}
+Authorization: Bearer {{pmeToken}}
+
+###
+GET {{baseUrl}}/dashboard/donneur-ordre/{{donneurId}}
+Authorization: Bearer {{validateur1Token}}
+
+###
+GET {{baseUrl}}/dashboard/partenaire/{{partenaireId}}
+Authorization: Bearer {{agentToken}}
+
+###
+GET {{baseUrl}}/dashboard/admin
+Authorization: Bearer {{adminToken}}
+
+### =====================================================================
+### ANNEXE A. REGLES DE LA DOUBLE VALIDATION (cas limites)
+### =====================================================================
+### Un role ne peut valider qu'une fois par facture, MEME avec un compte different du meme
+### role (ex : deux validateur_1 distincts). Necessite un 2eme validateur_1.
+
+# @name registerValidateur1Bis
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "entreprise_id": "{{donneurId}}",
+  "role": "validateur_1",
+  "nom": "Cheikh Mbaye",
+  "telephone": "+221787777777",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+###
+@validateur1BisToken = {{registerValidateur1Bis.response.body.$.access_token}}
+
+# @name creerFactureCasLimite
+POST {{baseUrl}}/factures
+Content-Type: application/json
+Authorization: Bearer {{pmeToken}}
+
+{
+  "numero_facture": "FAC-2026-CL1",
+  "donneur_ordre_id": "{{donneurId}}",
+  "montant": 300000,
+  "date_emission": "2026-08-22",
+  "date_echeance": "2026-10-22",
+  "piece_justificative_url": "https://example.com/facture-cl.pdf"
+}
+
+###
+@factureCasLimiteId = {{creerFactureCasLimite.response.body.$.id}}
+
+### 1ere validation (validateur_1) -> statut "validation_complementaire_requise"
+
+POST {{baseUrl}}/factures/{{factureCasLimiteId}}/valider
+Authorization: Bearer {{validateur1Token}}
+
+### Un AUTRE validateur_1 (compte different, meme role) est rejete (attendu : 400) —
+### seul un validateur_2 peut faire progresser cette facture desormais
+
+POST {{baseUrl}}/factures/{{factureCasLimiteId}}/valider
+Authorization: Bearer {{validateur1BisToken}}
+
+### Membre_pme ne peut jamais valider, quel que soit le statut (attendu : 403)
+
+POST {{baseUrl}}/factures/{{factureCasLimiteId}}/valider
+Authorization: Bearer {{pmeToken}}
+
+### =====================================================================
+### ANNEXE B. REJET DE FACTURE
+### =====================================================================
+
+# @name creerFactureARejeter
+POST {{baseUrl}}/factures
+Content-Type: application/json
+Authorization: Bearer {{pmeToken}}
+
+{
+  "numero_facture": "FAC-2026-REJ1",
+  "donneur_ordre_id": "{{donneurId}}",
+  "montant": 200000,
+  "date_emission": "2026-08-22",
+  "date_echeance": "2026-10-22",
+  "piece_justificative_url": "https://example.com/illisible.pdf"
+}
+
+###
+@factureRejetId = {{creerFactureARejeter.response.body.$.id}}
+
+POST {{baseUrl}}/factures/{{factureRejetId}}/rejeter
+Content-Type: application/json
+Authorization: Bearer {{validateur1Token}}
+
+{
+  "commentaire": "Piece justificative illisible"
+}
+
+### =====================================================================
+### ANNEXE C. MFA (validateur_1 / validateur_2 / agent_financier)
+### =====================================================================
+### 1. /auth/mfa/setup renvoie un secret + otpauth_uri (a scanner avec une app TOTP,
+###    ou a utiliser directement avec `pyotp.TOTP(secret).now()` en test).
+### 2. /auth/mfa/verify avec le code courant active mfa_actif.
+### 3. Les connexions suivantes renvoient alors mfa_required=true (HTTP 200, pas une
+###    erreur) tant que "code_mfa" n'est pas fourni dans /auth/login ; access_token et
+###    refresh_token restent a null dans ce cas. Un code invalide reste une erreur 401.
+
+# @name mfaSetup
+POST {{baseUrl}}/auth/mfa/setup
+Authorization: Bearer {{validateur1Token}}
+
+### Copier le "secret" de la reponse ci-dessus, generer un code TOTP (ex: via une app
+### Authenticator ou `python -c "import pyotp; print(pyotp.TOTP('SECRET').now())"`),
+### puis :
+
+POST {{baseUrl}}/auth/mfa/verify
+Content-Type: application/json
+Authorization: Bearer {{validateur1Token}}
+
+{
+  "code": "REMPLACER_PAR_LE_CODE_TOTP"
+}
+
+### Login sans code_mfa -> attendu 200 avec { "mfa_required": true, "access_token": null, ... } :
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "telephone": "+221775555555",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+### Login avec code_mfa -> attendu 200 :
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "telephone": "+221775555555",
+  "mot_de_passe": "MotDePasse123!",
+  "code_mfa": "REMPLACER_PAR_LE_CODE_TOTP"
+}
+
+### =====================================================================
+### ANNEXE D. IMPORT DE FACTURES (CSV/Excel) — necessite un client multipart
+### (Swagger UI est le plus simple pour ce test : POST /factures/import, champ "fichier")
+### Colonnes attendues : numero_facture, donneur_ordre_id, montant, date_emission,
+### date_echeance, piece_justificative_url, description
+### =====================================================================
+
+### =====================================================================
+### ANNEXE E. TICKETS SUPPORT
+### =====================================================================
+
+POST {{baseUrl}}/tickets-support
+Content-Type: application/json
+Authorization: Bearer {{pmeToken}}
+
+{
+  "sujet": "Probleme de connexion",
+  "description": "Impossible de me connecter depuis ce matin",
+  "priorite": "haute"
+}
+
+### =====================================================================
+### ANNEXE F. MESSAGERIE SUR FACTURE
+### =====================================================================
+
+POST {{baseUrl}}/factures/{{factureId}}/messages
+Content-Type: application/json
+Authorization: Bearer {{validateur1Token}}
+
+{
+  "contenu": "Pouvez-vous confirmer la date de livraison ?"
+}
+
+###
+GET {{baseUrl}}/factures/{{factureId}}/messages
+Authorization: Bearer {{pmeToken}}
+
+### =====================================================================
+### ANNEXE G. WEBHOOK WAVE (stub — accuse simplement reception)
+### =====================================================================
+
+POST {{baseUrl}}/webhooks/wave
+Content-Type: application/json
+Wave-Signature: stub-signature
+
+{
+  "event": "checkout.session.completed",
+  "id": "evt_stub_123"
+}
+
+### =====================================================================
+### ANNEXE H. INSCRIPTION EN LIBRE-SERVICE (flux utilise par le frontend web)
+### =====================================================================
+### /auth/register-entreprise cree l'Entreprise ET son premier Utilisateur en une seule
+### operation. Le "type" choisi determine le role cree automatiquement :
+###   PME -> membre_pme | GRANDE_ENTREPRISE -> validateur_1 (le premier arrivant ; il pourra
+###   ensuite inviter un collegue validateur_2 via ANNEXE I, la double validation etant
+###   obligatoire pour toute facture) | PARTENAIRE_FINANCIER -> agent_financier
+### statut_kyc demarre a "en_attente". Pas de champ "role" ni "entreprise_id" a fournir.
+
+# @name registerEntrepriseSelf
+POST {{baseUrl}}/auth/register-entreprise
+Content-Type: application/json
+
+{
+  "type": "PME",
+  "raison_sociale": "Casamance Cajou SARL",
+  "ninea": "123456789",
+  "secteur_activite": "Agroalimentaire",
+  "nom": "Ibrahima Sarr",
+  "telephone": "+221709999999",
+  "email": "contact@casamancecajou.sn",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+###
+@selfAccessToken = {{registerEntrepriseSelf.response.body.$.access_token}}
+
+### Verifie le role et le statut_kyc issus de l'inscription (utilise par l'ecran de
+### confirmation et par PendingValidation.tsx cote frontend) :
+
+# @name meSelf
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{selfAccessToken}}
+
+###
+@selfEntrepriseId = {{meSelf.response.body.$.entreprise.id}}
+
+### NINEA deja utilise -> attendu 409 :
+
+POST {{baseUrl}}/auth/register-entreprise
+Content-Type: application/json
+
+{
+  "type": "PME",
+  "raison_sociale": "Doublon SARL",
+  "ninea": "123456789",
+  "secteur_activite": "Commerce",
+  "nom": "Doublon Test",
+  "telephone": "+221701010101",
+  "email": "doublon@example.sn",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+### Format NINEA invalide -> attendu 422 avec detail[].loc = ["body","ninea"] :
+
+POST {{baseUrl}}/auth/register-entreprise
+Content-Type: application/json
+
+{
+  "type": "PME",
+  "raison_sociale": "Format Invalide SARL",
+  "ninea": "abc",
+  "secteur_activite": "Commerce",
+  "nom": "Format Invalide",
+  "telephone": "+221702020202",
+  "email": "format@example.sn",
+  "mot_de_passe": "MotDePasse123!"
+}
+
+### =====================================================================
+### ANNEXE I. INVITATION — un utilisateur invite un collegue de sa propre entreprise
+### =====================================================================
+### POST /entreprises/{entreprise_id}/inviter :
+###   - accessible a membre_pme, validateur_1, validateur_2, agent_financier (jamais a
+###     'admin', jamais tant que l'entreprise de l'appelant n'est pas KYC-validee)
+###   - le role demande est verifie contre le type d'entreprise de l'appelant (une PME ne
+###     peut inviter qu'en membre_pme, une GRANDE_ENTREPRISE qu'en validateur_1/2, un
+###     PARTENAIRE_FINANCIER qu'en agent_financier)
+###   - cree un compte inactif (compte_actif=false) + un token d'invitation. Le token est
+###     renvoye directement dans la reponse pour rester testable (aucun envoi email/SMS
+###     n'est encore branche a ce stade, comme le webhook Wave — voir ANNEXE G)
+
+### validateur1Token invite un collegue en validateur_2 (autre que celui deja cree en
+### section 3, pour illustrer le flux complet de bout en bout) :
+
+# @name inviterValidateur2Bis
+POST {{baseUrl}}/entreprises/{{donneurId}}/inviter
+Content-Type: application/json
+Authorization: Bearer {{validateur1Token}}
+
+{
+  "telephone": "+221788888888",
+  "email": "validateur2bis@auchan.sn",
+  "nom": "Bineta Diallo",
+  "role": "validateur_2"
+}
+
+###
+@invitationToken = {{inviterValidateur2Bis.response.body.$.token}}
+
+### L'invite definit son mot de passe et active son compte -> retourne une session
+### directement (pas d'ecran "en attente" : l'entreprise est deja KYC-validee) :
+
+POST {{baseUrl}}/auth/accepter-invitation/{{invitationToken}}
+Content-Type: application/json
+
+{
+  "mot_de_passe": "NouveauMotDePasse123!"
+}
+
+### Reutiliser le meme token une 2e fois est refuse (attendu : 400) :
+
+POST {{baseUrl}}/auth/accepter-invitation/{{invitationToken}}
+Content-Type: application/json
+
+{
+  "mot_de_passe": "AutreMotDePasse123!"
+}
+
+### Verification : une entreprise PME tentant d'inviter avec le role validateur_1 est
+### rejetee (attendu : 403) :
+
+POST {{baseUrl}}/entreprises/{{pmeId}}/inviter
+Content-Type: application/json
+Authorization: Bearer {{pmeToken}}
+
+{
+  "telephone": "+221789999999",
+  "email": "x@example.sn",
+  "nom": "Tentative Invalide",
+  "role": "validateur_1"
+}
+
+### Verification : inviter avec le role 'admin' est toujours rejete (attendu : 403) :
+
+POST {{baseUrl}}/entreprises/{{donneurId}}/inviter
+Content-Type: application/json
+Authorization: Bearer {{validateur1Token}}
+
+{
+  "telephone": "+221789999998",
+  "email": "y@example.sn",
+  "nom": "Tentative Admin",
+  "role": "admin"
+}
+
+### Verification : un compte dont l'entreprise n'est pas encore KYC-validee ne peut pas
+### inviter (attendu : 403). Utilise l'entreprise auto-inscrite en ANNEXE H, qui reste
+### "en_attente" tant qu'un admin ne l'a pas validee :
+
+POST {{baseUrl}}/entreprises/{{selfEntrepriseId}}/inviter
+Content-Type: application/json
+Authorization: Bearer {{selfAccessToken}}
+
+{
+  "telephone": "+221789999997",
+  "email": "z@example.sn",
+  "nom": "Tentative Non KYC",
+  "role": "membre_pme"
+}

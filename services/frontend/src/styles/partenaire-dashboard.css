@@ -1,0 +1,197 @@
+/* Regles propres a cedra-partenaire.html (Dashboard / Decision), scopees sous
+   .cedra-app.role-partenaire. */
+
+.cedra-app.role-partenaire .app{display:grid; grid-template-columns:224px 1fr; min-height:100vh;}
+.cedra-app.role-partenaire .app > div{min-width:0;}
+.cedra-app.role-partenaire main{min-width:0;}
+@media (max-width:960px){
+  .cedra-app.role-partenaire .app{grid-template-columns:minmax(0,1fr);}
+  .cedra-app.role-partenaire .sidebar{
+    display:flex !important; position:fixed; top:0; left:0; height:100vh; width:248px; z-index:60;
+    transform:translateX(-100%); transition:transform .25s ease; box-shadow:4px 0 24px rgba(0,0,0,.2);
+  }
+  .cedra-app.role-partenaire .sidebar.open{transform:translateX(0);}
+  .cedra-app.role-partenaire .topbar{padding-left:64px;}
+}
+
+.cedra-app.role-partenaire .sidebar{background:var(--green-dark); color:#CFE6DA; padding:18px 14px; display:flex; flex-direction:column;}
+.cedra-app.role-partenaire .brand{display:flex; align-items:center; gap:9px; padding:2px 6px 16px;}
+.cedra-app.role-partenaire .brand-name{color:#fff; font-weight:600; font-size:14.5px;}
+.cedra-app.role-partenaire .brand-sub{font-size:9.5px; color:#7FC4A0; letter-spacing:1.4px;}
+.cedra-app.role-partenaire nav.primary{display:flex; flex-direction:column; gap:1px; margin-bottom:14px;}
+.cedra-app.role-partenaire .nav-item{display:flex; align-items:center; gap:9px; padding:7px 9px; border-radius:7px; color:#BFDAC9; text-decoration:none; font-size:12.6px;}
+.cedra-app.role-partenaire .nav-item:hover{background:#0F4A2E; color:#fff;}
+.cedra-app.role-partenaire .nav-item.active{background:var(--green); color:#fff; font-weight:500;}
+.cedra-app.role-partenaire .nav-item .badge{margin-left:auto; background:#0F4A2E; color:#9FDABB; font-size:10px; font-weight:600; padding:1px 6px; border-radius:20px;}
+.cedra-app.role-partenaire .sidebar-spacer{flex:1;}
+.cedra-app.role-partenaire .help-box{background:#0F4A2E; border-radius:9px; padding:12px; font-size:11.5px; color:#BFDAC9;}
+.cedra-app.role-partenaire .help-box .btn{display:block; text-align:center; background:var(--green); color:#fff; border-radius:7px; padding:7px; margin-top:8px; text-decoration:none; font-weight:600; font-size:12px;}
+
+.cedra-app.role-partenaire .topbar{display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 24px; background:var(--white); border-bottom:1px solid var(--line);}
+.cedra-app.role-partenaire .topbar .back{display:flex; align-items:center; gap:8px; color:var(--muted); text-decoration:none; font-size:12.5px; font-weight:600; margin-bottom:4px;}
+.cedra-app.role-partenaire .topbar h1{font-size:17px; font-weight:600; margin:0;}
+.cedra-app.role-partenaire .topbar .sub{font-size:11.5px; color:var(--muted); margin-top:1px;}
+.cedra-app.role-partenaire .topbar-right{display:flex; align-items:center; gap:14px;}
+.cedra-app.role-partenaire .icon-btn{width:32px; height:32px; border-radius:8px; border:1px solid var(--line); background:var(--white); display:flex; align-items:center; justify-content:center; position:relative; color:var(--muted);}
+.cedra-app.role-partenaire .icon-btn .dot{position:absolute; top:-3px; right:-3px; background:var(--red); color:#fff; font-size:9px; font-weight:700; border-radius:20px; padding:1px 4px;}
+.cedra-app.role-partenaire .avatar{width:30px; height:30px; border-radius:50%; background:#EFE7F9; color:var(--violet); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;}
+.cedra-app.role-partenaire .who{display:flex; align-items:center; gap:8px;}
+.cedra-app.role-partenaire .who .name{font-size:12.3px; font-weight:600;}
+.cedra-app.role-partenaire .who .role{font-size:10.5px; color:var(--muted);}
+.cedra-app.role-partenaire .sla-tag{display:flex; align-items:center; gap:6px; background:#FBF0E1; color:var(--amber); font-size:11.5px; font-weight:600; padding:6px 12px; border-radius:20px;}
+
+.cedra-app.role-partenaire main{padding:16px 24px 20px;}
+.cedra-app.role-partenaire .sla-banner{display:flex; align-items:center; gap:9px; background:#EFE7F9; color:#4A3A6B; border-radius:8px; padding:8px 14px; font-size:11.8px; margin-bottom:14px;}
+.cedra-app.role-partenaire .sla-banner svg.ic{color:var(--violet);}
+.cedra-app.role-partenaire .kpi-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:14px;}
+@media (max-width:900px){ .cedra-app.role-partenaire .kpi-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);} }
+.cedra-app.role-partenaire .kpi-card{background:var(--white); border:1px solid var(--line); border-radius:10px; padding:13px 14px;}
+.cedra-app.role-partenaire .kpi-top{display:flex; align-items:center; gap:9px; margin-bottom:8px;}
+.cedra-app.role-partenaire .kpi-ic{width:28px; height:28px; border-radius:7px; display:flex; align-items:center; justify-content:center; color:#fff; flex-shrink:0;}
+.cedra-app.role-partenaire .kpi-ic svg{width:15px; height:15px; stroke:#fff;}
+.cedra-app.role-partenaire .kpi-label{font-size:10.2px; color:var(--muted); letter-spacing:0.3px; font-weight:600;}
+.cedra-app.role-partenaire .kpi-value{font-size:19px; font-weight:700;}
+.cedra-app.role-partenaire .grid-2{display:grid; grid-template-columns:1.15fr 0.85fr; gap:12px; margin-bottom:12px;}
+@media (max-width:960px){ .cedra-app.role-partenaire .grid-2{grid-template-columns:minmax(0,1fr);} }
+.cedra-app.role-partenaire .panel{background:var(--white); border:1px solid var(--line); border-radius:10px; padding:15px 16px; margin-bottom:14px; overflow-x:auto; min-width:0;}
+.cedra-app.role-partenaire .panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:11px;}
+.cedra-app.role-partenaire .panel-head h2{font-size:13.6px; font-weight:600; margin:0;}
+.cedra-app.role-partenaire .panel-head .sub{font-size:11px; color:var(--muted); margin-top:1px;}
+.cedra-app.role-partenaire .link-btn{font-size:11.5px; color:var(--green); text-decoration:none; font-weight:600; background:none; border:none; cursor:pointer; font-family:inherit;}
+.cedra-app.role-partenaire table{width:100%; border-collapse:collapse; font-size:11.8px;}
+.cedra-app.role-partenaire th{text-align:left; font-size:9.5px; letter-spacing:0.4px; color:var(--muted); font-weight:600; padding:0 7px 6px; border-bottom:1px solid var(--line);}
+.cedra-app.role-partenaire td{padding:7px; border-bottom:1px solid #EEF2EF; vertical-align:middle;}
+.cedra-app.role-partenaire tr:last-child td{border-bottom:none;}
+.cedra-app.role-partenaire td.ref{white-space:nowrap;}
+.cedra-app.role-partenaire .status{display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:600; padding:2.5px 7px; border-radius:20px; white-space:nowrap;}
+.cedra-app.role-partenaire .status.pilote{background:#FBF0E1; color:var(--amber);}
+.cedra-app.role-partenaire .status.signee{background:#E4F1EA; color:var(--green);}
+.cedra-app.role-partenaire .status.validation{background:#FBF0E1; color:var(--amber);}
+.cedra-app.role-partenaire .status.avancee{background:#E4F1EA; color:var(--green);}
+.cedra-app.role-partenaire .status.soldee{background:#DCEFE1; color:#1F6B45;}
+.cedra-app.role-partenaire .status.litige{background:#F7DCD8; color:#8C2E22;}
+.cedra-app.role-partenaire .cheque-flag{display:inline-flex; align-items:center; gap:4px; font-size:9.8px; color:var(--green); font-weight:600; white-space:nowrap;}
+.cedra-app.role-partenaire .cheque-flag svg{width:11px; height:11px;}
+.cedra-app.role-partenaire .btn-decide{background:var(--green); color:#fff; border:none; border-radius:6px; padding:5px 10px; font-size:10.5px; font-weight:600; cursor:pointer; white-space:nowrap;}
+.cedra-app.role-partenaire .btn-decide.urgent{background:var(--red);}
+.cedra-app.role-partenaire .stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+@media (max-width:900px){ .cedra-app.role-partenaire .stat-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);} }
+.cedra-app.role-partenaire .stat-card{background:var(--white); border:1px solid var(--line); border-radius:10px; padding:13px 14px;}
+.cedra-app.role-partenaire .stat-card .l{font-size:10.8px; color:var(--muted); margin-bottom:5px;}
+.cedra-app.role-partenaire .stat-card .v{font-size:18px; font-weight:700;}
+.cedra-app.role-partenaire .donut-wrap{display:flex; align-items:center; gap:16px;}
+.cedra-app.role-partenaire .donut{width:100px; height:100px; border-radius:50%; flex-shrink:0; position:relative;}
+.cedra-app.role-partenaire .donut-center{position:absolute; inset:15px; background:var(--white); border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.cedra-app.role-partenaire .donut-center b{font-size:14px;}
+.cedra-app.role-partenaire .donut-center span{font-size:8.5px; color:var(--muted);}
+.cedra-app.role-partenaire .legend{display:flex; flex-direction:column; gap:6px; font-size:11px;}
+.cedra-app.role-partenaire .legend-item{display:flex; align-items:center; gap:7px;}
+.cedra-app.role-partenaire .legend-dot{width:8px; height:8px; border-radius:50%; flex-shrink:0;}
+.cedra-app.role-partenaire .legend-item .amt{margin-left:auto; font-weight:600;}
+.cedra-app.role-partenaire .empty-state{background:var(--white); border:1px solid var(--line); border-radius:10px; padding:32px; text-align:center; color:var(--muted); font-size:13px;}
+.cedra-app.role-partenaire .generic-topbar{padding:16px 24px; background:var(--white); border-bottom:1px solid var(--line);}
+.cedra-app.role-partenaire .generic-topbar h1{font-size:17px; font-weight:600; margin:0;}
+
+/* --- Notifications / Rapports --- */
+.cedra-app.role-partenaire .notif-filters{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;}
+.cedra-app.role-partenaire .notif-chip{font-size:11.5px; font-weight:600; padding:6px 13px; border-radius:20px; border:1px solid var(--line); background:var(--white); color:var(--muted); cursor:pointer; font-family:inherit;}
+.cedra-app.role-partenaire .notif-chip.active{background:var(--violet); border-color:var(--violet); color:#fff;}
+.cedra-app.role-partenaire .notif-list-item{display:flex; gap:12px; padding:14px 16px; border-bottom:1px solid #EEF2EF;}
+.cedra-app.role-partenaire .notif-list-item:last-child{border-bottom:none;}
+.cedra-app.role-partenaire .notif-list-item.unread{background:#FBFAFE;}
+.cedra-app.role-partenaire .notif-ic{width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; color:#fff;}
+.cedra-app.role-partenaire .notif-ic svg{width:16px; height:16px; stroke:#fff; fill:none; stroke-width:1.8;}
+.cedra-app.role-partenaire .notif-body{flex:1;}
+.cedra-app.role-partenaire .notif-body .t{font-size:12.8px; font-weight:600;}
+.cedra-app.role-partenaire .notif-body .d{font-size:11.8px; color:var(--muted); margin-top:2px;}
+.cedra-app.role-partenaire .notif-time{font-size:10.5px; color:var(--muted); white-space:nowrap;}
+.cedra-app.role-partenaire .unread-dot{width:7px; height:7px; border-radius:50%; background:var(--violet); flex-shrink:0; margin-top:5px;}
+
+.cedra-app.role-partenaire .report-card{display:flex; align-items:center; justify-content:space-between; padding:13px 16px; border:1px solid var(--line); border-radius:9px; margin-bottom:9px;}
+.cedra-app.role-partenaire .report-card .t{font-size:12.8px; font-weight:600;}
+.cedra-app.role-partenaire .report-card .d{font-size:11px; color:var(--muted); margin-top:2px;}
+.cedra-app.role-partenaire .report-dl{font-size:11.5px; color:var(--violet); font-weight:600; text-decoration:none; background:#EFE7F9; padding:6px 13px; border-radius:7px; border:none; cursor:pointer; font-family:inherit;}
+.cedra-app.role-partenaire .bar-chart{display:flex; align-items:flex-end; gap:10px; height:140px; margin-top:10px;}
+.cedra-app.role-partenaire .bar-chart .bar{flex:1; background:var(--violet); border-radius:4px 4px 0 0; position:relative;}
+.cedra-app.role-partenaire .bar-chart .bar .lbl{position:absolute; bottom:-20px; left:0; right:0; text-align:center; font-size:10px; color:var(--muted);}
+
+/* --- Financements / Portefeuille / Remboursements / Conventions / PME / Acheteurs / Grilles --- */
+.cedra-app.role-partenaire .filters-bar{display:flex; gap:8px; align-items:center; margin-bottom:16px; flex-wrap:wrap;}
+.cedra-app.role-partenaire .search-input{border:1px solid var(--line); border-radius:7px; padding:8px 12px; font-size:12.5px; font-family:inherit; width:260px;}
+.cedra-app.role-partenaire .select-filter{border:1px solid var(--line); border-radius:7px; padding:8px 10px; font-size:12.3px; font-family:inherit; background:var(--white); color:var(--ink);}
+
+.cedra-app.role-partenaire .progress-3{display:flex; gap:4px; align-items:center;}
+.cedra-app.role-partenaire .p3-dot{width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#fff;}
+.cedra-app.role-partenaire .p3-dot.done{background:var(--green);}
+.cedra-app.role-partenaire .p3-dot.pending{background:#EEF1EF; color:var(--muted);}
+
+.cedra-app.role-partenaire .limit-bar{height:8px; border-radius:5px; background:#EEF1EF; overflow:hidden; margin:6px 0 4px; width:140px;}
+.cedra-app.role-partenaire .limit-bar .fill{height:100%; background:var(--violet);}
+
+.cedra-app.role-partenaire .grille-form{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:14px;}
+.cedra-app.role-partenaire .grille-field label{display:block; font-size:11.5px; font-weight:600; margin-bottom:5px;}
+.cedra-app.role-partenaire .grille-field input{width:100%; border:1px solid var(--line); border-radius:7px; padding:9px 11px; font-size:13px; font-family:inherit; background:#FBFCFB; color:var(--muted);}
+.cedra-app.role-partenaire .preview-table{width:100%; font-size:12px; border-collapse:collapse; margin-top:6px;}
+.cedra-app.role-partenaire .preview-table th{text-align:left; color:var(--muted); font-size:10.3px; font-weight:600; padding:0 8px 6px; border-bottom:1px solid var(--line);}
+.cedra-app.role-partenaire .preview-table td{padding:7px 8px; border-bottom:1px solid #EEF2EF;}
+.cedra-app.role-partenaire .preview-table .ok{color:var(--green); font-weight:600;}
+
+/* --- decision --- */
+.cedra-app.role-partenaire .decision-main{padding:20px 24px 30px; display:grid; grid-template-columns:1.4fr 1fr; gap:16px; align-items:start;}
+@media (max-width:1100px){ .cedra-app.role-partenaire .decision-main{grid-template-columns:minmax(0,1fr);} }
+
+.cedra-app.role-partenaire .panel h2{font-size:14px; font-weight:600; margin:0 0 12px;}
+
+.cedra-app.role-partenaire .facture-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;}
+.cedra-app.role-partenaire .facture-head .ref{font-size:11px; color:var(--muted);}
+.cedra-app.role-partenaire .facture-head .title{font-size:16px; font-weight:600; margin-top:2px;}
+.cedra-app.role-partenaire .facture-head .amount{font-size:22px; font-weight:700; font-family:'IBM Plex Mono',monospace; color:var(--green-dark); text-align:right;}
+.cedra-app.role-partenaire .facture-head .amount-label{font-size:10.5px; color:var(--muted); text-align:right;}
+
+.cedra-app.role-partenaire .kv-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; margin-bottom:6px;}
+.cedra-app.role-partenaire .kv{padding:10px 0; border-top:1px solid #EEF2EF;}
+.cedra-app.role-partenaire .kv .l{font-size:10.5px; color:var(--muted); margin-bottom:3px;}
+.cedra-app.role-partenaire .kv .v{font-size:12.8px; font-weight:600;}
+
+.cedra-app.role-partenaire .check-list{display:flex; flex-direction:column; gap:0;}
+.cedra-app.role-partenaire .check-item{display:flex; align-items:flex-start; gap:11px; padding:11px 0; border-bottom:1px solid #EEF2EF;}
+.cedra-app.role-partenaire .check-item:last-child{border-bottom:none;}
+.cedra-app.role-partenaire .check-ic{width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;}
+.cedra-app.role-partenaire .check-ic.ok{background:var(--green-soft); color:var(--green);}
+.cedra-app.role-partenaire .check-ic.warn{background:#FBF0E1; color:var(--amber);}
+.cedra-app.role-partenaire .check-ic.bad{background:#F7DCD8; color:var(--red);}
+.cedra-app.role-partenaire .check-ic svg{width:13px; height:13px;}
+.cedra-app.role-partenaire .check-txt .t{font-size:12.6px; font-weight:600;}
+.cedra-app.role-partenaire .check-txt .d{font-size:11.2px; color:var(--muted); margin-top:1px;}
+
+.cedra-app.role-partenaire .envelope-bar{height:9px; border-radius:6px; background:#EEF1EF; overflow:hidden; margin:8px 0 6px;}
+.cedra-app.role-partenaire .envelope-bar .fill{height:100%; background:var(--violet);}
+.cedra-app.role-partenaire .envelope-labels{display:flex; justify-content:space-between; font-size:10.8px; color:var(--muted);}
+
+.cedra-app.role-partenaire .grille-row{display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #EEF2EF; font-size:12.3px;}
+.cedra-app.role-partenaire .grille-row:last-child{border-bottom:none; font-weight:700;}
+.cedra-app.role-partenaire .grille-row span:first-child{color:var(--muted); font-weight:400;}
+
+.cedra-app.role-partenaire .actions-panel{position:sticky; top:20px;}
+.cedra-app.role-partenaire .btn-approve{width:100%; background:var(--green); color:#fff; border:none; border-radius:8px; padding:12px; font-size:13.5px; font-weight:600; cursor:pointer; margin-bottom:8px;}
+.cedra-app.role-partenaire .btn-approve:disabled{opacity:0.6; cursor:not-allowed;}
+.cedra-app.role-partenaire .btn-reject{width:100%; background:var(--white); color:var(--red); border:1px solid #F0C6BE; border-radius:8px; padding:11px; font-size:13px; font-weight:600; cursor:pointer;}
+.cedra-app.role-partenaire .btn-reject:disabled{opacity:0.6; cursor:not-allowed;}
+.cedra-app.role-partenaire .field{margin-top:14px;}
+.cedra-app.role-partenaire .field label{display:block; font-size:11.5px; font-weight:600; margin-bottom:5px;}
+.cedra-app.role-partenaire .field textarea{width:100%; border:1px solid var(--line); border-radius:7px; padding:9px 11px; font-size:12.5px; font-family:inherit; resize:vertical; min-height:60px;}
+
+/* --- Avoirs sur portefeuille (Partenaire) --- */
+.cedra-app.role-partenaire .avoir-impact-card{background:var(--white); border:1px solid var(--line); border-left:3px solid var(--amber); border-radius:10px; padding:16px 20px; margin-bottom:12px;}
+.cedra-app.role-partenaire .avoir-impact-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap:12px; flex-wrap:wrap;}
+.cedra-app.role-partenaire .avoir-impact-head .ref{font-size:11px; color:var(--muted);}
+.cedra-app.role-partenaire .avoir-impact-head .title{font-size:13.5px; font-weight:600; margin-top:2px;}
+.cedra-app.role-partenaire .avoir-impact-amt{text-align:right;}
+.cedra-app.role-partenaire .avoir-impact-amt .v{font-size:16px; font-weight:700; font-family:'IBM Plex Mono',monospace; color:var(--red);}
+.cedra-app.role-partenaire .avoir-impact-amt .l{font-size:10px; color:var(--muted);}
+.cedra-app.role-partenaire .avoir-recalc{display:flex; gap:20px; font-size:12px; background:#FBFCFB; border-radius:7px; padding:11px 14px; flex-wrap:wrap;}
+.cedra-app.role-partenaire .avoir-recalc div span{display:block; color:var(--muted); font-size:10.5px;}
+.cedra-app.role-partenaire .avoir-recalc div b{font-family:'IBM Plex Mono',monospace;}
+.cedra-app.role-partenaire .avoir-tag{font-size:10px; font-weight:600; padding:2px 8px; border-radius:20px;}
+.cedra-app.role-partenaire .avoir-tag.applied{background:var(--green-soft); color:var(--green);}
+.cedra-app.role-partenaire .avoir-tag.creance{background:#FBF0E1; color:var(--amber);}
