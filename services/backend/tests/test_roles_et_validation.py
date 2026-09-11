@@ -129,7 +129,7 @@ def test_invitation_reussie_puis_acceptation_active_le_compte(client, db_session
 
     login = client.post(
         "/auth/login",
-        json={"telephone": "+221709996655", "mot_de_passe": "NouveauMotDePasse123!"},
+        json={"identifiant": "+221709996655", "mot_de_passe": "NouveauMotDePasse123!"},
     )
     assert login.status_code == 200
     assert login.json()["access_token"]

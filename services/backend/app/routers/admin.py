@@ -81,6 +81,8 @@ def creer_utilisateur_admin(
 
     if db.query(Utilisateur).filter(Utilisateur.telephone == payload.telephone).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Ce numero de telephone est deja utilise")
+    if payload.email and db.query(Utilisateur).filter(func.lower(Utilisateur.email) == payload.email.lower()).first():
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Cet email est deja utilise")
 
     mot_de_passe_temporaire = secrets.token_urlsafe(9)
     utilisateur = Utilisateur(

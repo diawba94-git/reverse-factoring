@@ -1,6 +1,7 @@
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Response, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -32,6 +33,8 @@ def creer_utilisateur(
 ):
     if db.query(Utilisateur).filter(Utilisateur.telephone == payload.telephone).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Ce numero de telephone est deja utilise")
+    if payload.email and db.query(Utilisateur).filter(func.lower(Utilisateur.email) == payload.email.lower()).first():
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Cet email est deja utilise")
 
     utilisateur = Utilisateur(
         entreprise_id=payload.entreprise_id,
@@ -106,6 +109,12 @@ def modifier_utilisateur(
     current_user: Utilisateur = Depends(require_role(_ROLES_ADMIN)),
 ):
     utilisateur = _get_utilisateur_or_404(db, utilisateur_id)
+    if payload.email and payload.email.lower() != (utilisateur.email or "").lower():
+        if db.query(Utilisateur).filter(
+            Utilisateur.id != utilisateur_id, func.lower(Utilisateur.email) == payload.email.lower()
+        ).first():
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Cet email est deja utilise")
+
     avant = {"role": utilisateur.role.value, "compte_actif": utilisateur.compte_actif}
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(utilisateur, field, value)

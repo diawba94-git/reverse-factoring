@@ -6,7 +6,7 @@ import { Logo } from "../../components/shell/Logo";
 import { useAuth, roleHomePath } from "../../context/AuthContext";
 import { login } from "../../lib/authApi";
 import { ApiError } from "../../lib/apiClient";
-import { normalizePhone } from "../../lib/validators";
+import { isValidEmail, normalizePhone } from "../../lib/validators";
 import { obtenirStatsPubliques, type PublicStatsOut } from "../../lib/publicApi";
 
 function formatVolumeFinance(brut: string): string {
@@ -18,13 +18,22 @@ function formatVolumeFinance(brut: string): string {
 }
 
 const GENERIC_CREDENTIALS_ERROR =
-  "Identifiants invalides. Vérifiez votre numéro de téléphone et votre mot de passe, ou réinitialisez ce dernier.";
+  "Identifiants invalides. Vérifiez votre téléphone/email et votre mot de passe, ou réinitialisez ce dernier.";
 const GENERIC_OTP_ERROR = "Code incorrect ou expiré. Vérifiez le code généré par votre application d'authentification.";
 
-function maskPhone(phone: string): string {
-  const digits = phone.replace(/\s+/g, "");
+function maskIdentifiant(identifiant: string): string {
+  if (isValidEmail(identifiant)) {
+    const [local, domain] = identifiant.split("@");
+    return local.length <= 2 ? `••@${domain}` : `${local.slice(0, 2)}••@${domain}`;
+  }
+  const digits = identifiant.replace(/\s+/g, "");
   if (digits.length <= 6) return digits;
   return `${digits.slice(0, 4)} •••• ${digits.slice(-2)}`;
+}
+
+function normalizeIdentifiant(value: string): string {
+  const trimmed = value.trim();
+  return isValidEmail(trimmed) ? trimmed : normalizePhone(trimmed);
 }
 
 export function Login() {
@@ -32,7 +41,7 @@ export function Login() {
   const { startSession } = useAuth();
 
   const [step, setStep] = useState<"credentials" | "otp">("credentials");
-  const [telephone, setTelephone] = useState("");
+  const [identifiant, setIdentifiant] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
   const [codeMfa, setCodeMfa] = useState("");
   const [showForgotHint, setShowForgotHint] = useState(false);
@@ -63,9 +72,9 @@ export function Login() {
     setError(null);
     setFieldErrors({});
 
-    if (!telephone.trim() || !motDePasse) {
+    if (!identifiant.trim() || !motDePasse) {
       setFieldErrors({
-        ...(!telephone.trim() ? { telephone: "Champ requis" } : {}),
+        ...(!identifiant.trim() ? { identifiant: "Champ requis" } : {}),
         ...(!motDePasse ? { mot_de_passe: "Champ requis" } : {}),
       });
       return;
@@ -73,7 +82,7 @@ export function Login() {
 
     setSubmitting(true);
     try {
-      const result = await login({ telephone: normalizePhone(telephone), mot_de_passe: motDePasse });
+      const result = await login({ identifiant: normalizeIdentifiant(identifiant), mot_de_passe: motDePasse });
       if (result.mfa_required) {
         setStep("otp");
       } else if (result.access_token && result.refresh_token) {
@@ -101,7 +110,11 @@ export function Login() {
 
     setSubmitting(true);
     try {
-      const result = await login({ telephone: normalizePhone(telephone), mot_de_passe: motDePasse, code_mfa: codeMfa });
+      const result = await login({
+        identifiant: normalizeIdentifiant(identifiant),
+        mot_de_passe: motDePasse,
+        code_mfa: codeMfa,
+      });
       if (result.access_token && result.refresh_token) {
         await completeLogin(result.access_token, result.refresh_token);
       }
@@ -151,16 +164,16 @@ export function Login() {
                 )}
 
                 <div className="field">
-                  <label>Téléphone</label>
+                  <label>Téléphone ou email</label>
                   <input
-                    type="tel"
-                    autoComplete="tel"
-                    placeholder="+221 77 000 00 00"
-                    value={telephone}
-                    onChange={(e) => setTelephone(e.target.value)}
+                    type="text"
+                    autoComplete="username"
+                    placeholder="+221 77 000 00 00 ou vous@exemple.com"
+                    value={identifiant}
+                    onChange={(e) => setIdentifiant(e.target.value)}
                   />
-                  {fieldErrors.telephone && (
-                    <div style={{ color: "var(--red)", fontSize: 11, marginTop: 4 }}>{fieldErrors.telephone}</div>
+                  {fieldErrors.identifiant && (
+                    <div style={{ color: "var(--red)", fontSize: 11, marginTop: 4 }}>{fieldErrors.identifiant}</div>
                   )}
                 </div>
                 <div className="field">
@@ -203,7 +216,7 @@ export function Login() {
             <>
               <h1>Vérification en deux étapes</h1>
               <p className="sub">
-                Saisissez le code à 6 chiffres généré par votre application d'authentification pour le compte {maskPhone(telephone)}.
+                Saisissez le code à 6 chiffres généré par votre application d'authentification pour le compte {maskIdentifiant(identifiant)}.
               </p>
 
               <form onSubmit={handleOtpSubmit}>

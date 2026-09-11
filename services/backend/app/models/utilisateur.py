@@ -22,7 +22,10 @@ class Utilisateur(Base):
     )
     nom: Mapped[str | None] = mapped_column(String(255), nullable=True)
     telephone: Mapped[str] = mapped_column(String(30), unique=True, nullable=False, index=True)
-    email: Mapped[str] = mapped_column(String(255), nullable=True)
+    # Unicite reellement appliquee par un index fonctionnel sur lower(email) (voir
+    # migration f3e52885a9d0), pas par une contrainte unique classique sur la colonne :
+    # la recherche de connexion (app.routers.auth.login) est insensible a la casse.
+    email: Mapped[str | None] = mapped_column(String(255), nullable=True)
     mot_de_passe_hash: Mapped[str] = mapped_column(String(512), nullable=False)
     mfa_actif: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     mfa_secret: Mapped[str | None] = mapped_column(String(255), nullable=True)

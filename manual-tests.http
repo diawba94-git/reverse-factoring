@@ -42,7 +42,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "telephone": "+221770000000",
+  "identifiant": "+221770000000",
   "mot_de_passe": "ChangeMoi123!"
 }
 
@@ -566,7 +566,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "telephone": "+221775555555",
+  "identifiant": "+221775555555",
   "mot_de_passe": "MotDePasse123!"
 }
 
@@ -576,7 +576,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "telephone": "+221775555555",
+  "identifiant": "+221775555555",
   "mot_de_passe": "MotDePasse123!",
   "code_mfa": "REMPLACER_PAR_LE_CODE_TOTP"
 }

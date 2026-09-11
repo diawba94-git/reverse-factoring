@@ -41,7 +41,8 @@ d'invitation (`POST /entreprises/{id}/inviter`), qui exige une entreprise déjà
 
 ## 3. Se connecter
 
-- Via Swagger UI : `POST /auth/login` avec `{"telephone": "...", "mot_de_passe": "..."}`,
+- Via Swagger UI : `POST /auth/login` avec `{"identifiant": "...", "mot_de_passe": "..."}`
+  (`identifiant` accepte indifféremment le téléphone ou l'email du compte),
   puis "Authorize" avec le `access_token` reçu.
 - Via le frontend web (http://localhost:5175) : écran de connexion standard.
 - Via le fichier [manual-tests.http](manual-tests.http) (extension VS Code "REST Client") :

@@ -57,7 +57,10 @@ class RegisterEntrepriseRequest(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    telephone: str
+    """`identifiant` accepte indifferemment le numero de telephone ou l'email du compte
+    (voir app.routers.auth.login, qui cherche l'utilisateur sur les deux colonnes)."""
+
+    identifiant: str
     mot_de_passe: str
     code_mfa: str | None = None
 

@@ -55,7 +55,8 @@ export function registerEntreprise(payload: RegisterEntreprisePayload) {
 }
 
 export type LoginPayload = {
-  telephone: string;
+  /** Numero de telephone ou email du compte. */
+  identifiant: string;
   mot_de_passe: string;
   code_mfa?: string;
 };

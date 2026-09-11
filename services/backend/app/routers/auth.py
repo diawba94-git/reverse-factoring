@@ -3,6 +3,7 @@ from datetime import date, datetime, timezone
 
 import pyotp
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -77,6 +78,8 @@ def register(payload: RegisterRequest, request: Request, db: Session = Depends(g
 
     if db.query(Utilisateur).filter(Utilisateur.telephone == payload.telephone).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Ce numero de telephone est deja utilise")
+    if payload.email and db.query(Utilisateur).filter(func.lower(Utilisateur.email) == payload.email.lower()).first():
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Cet email est deja utilise")
 
     utilisateur = Utilisateur(
         entreprise_id=payload.entreprise_id,
@@ -108,6 +111,8 @@ def register_entreprise(payload: RegisterEntrepriseRequest, request: Request, db
     connexion automatique n'est requise cote frontend (voir PendingValidation)."""
     if db.query(Utilisateur).filter(Utilisateur.telephone == payload.telephone).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Ce numero de telephone est deja utilise")
+    if db.query(Utilisateur).filter(func.lower(Utilisateur.email) == payload.email.lower()).first():
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Cet email est deja utilise")
 
     if db.query(Entreprise).filter(Entreprise.ninea == payload.ninea).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Une entreprise avec ce NINEA existe deja")
@@ -162,7 +167,12 @@ def register_entreprise(payload: RegisterEntrepriseRequest, request: Request, db
 
 @router.post("/login", response_model=LoginResponse)
 def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)):
-    utilisateur = db.query(Utilisateur).filter(Utilisateur.telephone == payload.telephone).first()
+    identifiant = payload.identifiant.strip()
+    utilisateur = (
+        db.query(Utilisateur)
+        .filter(or_(Utilisateur.telephone == identifiant, func.lower(Utilisateur.email) == identifiant.lower()))
+        .first()
+    )
     if utilisateur is None or not verify_password(payload.mot_de_passe, utilisateur.mot_de_passe_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Identifiants invalides")
 
@@ -268,6 +278,10 @@ def rejoindre_entreprise(
 
     if db.query(Utilisateur).filter(Utilisateur.telephone == payload.telephone).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Ce numero de telephone est deja utilise")
+    if entreprise.contact_invitation_email and db.query(Utilisateur).filter(
+        func.lower(Utilisateur.email) == entreprise.contact_invitation_email.lower()
+    ).first():
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Cet email est deja utilise")
 
     utilisateur = Utilisateur(
         entreprise_id=entreprise.id,

@@ -60,6 +60,7 @@ def creer_utilisateur(
     entreprise: Entreprise,
     role: RoleUtilisateur,
     telephone: str | None = None,
+    email: str | None = None,
     compte_actif: bool = True,
 ) -> Utilisateur:
     utilisateur = Utilisateur(
@@ -67,7 +68,7 @@ def creer_utilisateur(
         role=role,
         nom="Utilisateur Test",
         telephone=telephone or f"+2217{uuid.uuid4().int % 10**8:08d}",
-        email="user@example.sn",
+        email=email or f"user-{uuid.uuid4().hex[:10]}@example.sn",
         mot_de_passe_hash=hash_password("MotDePasse123!"),
         compte_actif=compte_actif,
     )

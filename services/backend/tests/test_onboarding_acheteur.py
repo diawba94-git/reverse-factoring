@@ -21,7 +21,7 @@ def test_parcours_complet_onboarding_acheteur(client, db_session):
         json={
             "raison_sociale": "CFAO Distribution",
             "contact_invitation_nom": "Moussa Ndiaye",
-            "contact_invitation_email": "moussa.ndiaye@cfao.sn",
+            "contact_invitation_email": f"moussa.ndiaye+{uuid.uuid4().hex[:10]}@cfao.sn",
         },
         headers=auth_headers(membre),
     ).json()

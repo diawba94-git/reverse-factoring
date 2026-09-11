@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -260,6 +261,8 @@ def inviter_utilisateur(
 
     if db.query(Utilisateur).filter(Utilisateur.telephone == payload.telephone).first():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Ce numero de telephone est deja utilise")
+    if db.query(Utilisateur).filter(func.lower(Utilisateur.email) == payload.email.lower()).first():
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Cet email est deja utilise")
 
     utilisateur = Utilisateur(
         entreprise_id=entreprise.id,

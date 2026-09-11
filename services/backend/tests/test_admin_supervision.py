@@ -15,7 +15,7 @@ def test_sessions_listees_apres_login_et_revocation(client, db_session):
     membre = creer_utilisateur(db_session, entreprise=pme, role=RoleUtilisateur.MEMBRE_PME)
     admin = _admin(db_session)
 
-    login = client.post("/auth/login", json={"telephone": membre.telephone, "mot_de_passe": "MotDePasse123!"})
+    login = client.post("/auth/login", json={"identifiant": membre.telephone, "mot_de_passe": "MotDePasse123!"})
     assert login.status_code == 200, login.text
 
     r = client.get(f"/admin/utilisateurs/{membre.id}/sessions", headers=auth_headers(admin))
@@ -38,8 +38,8 @@ def test_revoquer_toutes_les_sessions(client, db_session):
     membre = creer_utilisateur(db_session, entreprise=pme, role=RoleUtilisateur.MEMBRE_PME)
     admin = _admin(db_session)
 
-    client.post("/auth/login", json={"telephone": membre.telephone, "mot_de_passe": "MotDePasse123!"})
-    client.post("/auth/login", json={"telephone": membre.telephone, "mot_de_passe": "MotDePasse123!"})
+    client.post("/auth/login", json={"identifiant": membre.telephone, "mot_de_passe": "MotDePasse123!"})
+    client.post("/auth/login", json={"identifiant": membre.telephone, "mot_de_passe": "MotDePasse123!"})
 
     r = client.post(f"/admin/utilisateurs/{membre.id}/sessions/revoquer-tout", headers=auth_headers(admin))
     assert r.status_code == 204, r.text
