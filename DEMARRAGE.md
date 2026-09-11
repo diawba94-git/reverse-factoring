@@ -20,13 +20,16 @@ NINEA / téléphone).
 
 Mot de passe commun à tous les comptes de test (hors admin) : **`Test1234!`**
 
-| Partie                          | Entreprise           | Nom            | Téléphone       | Rôle             | Mot de passe     |
-|----------------------------------|-----------------------|----------------|-----------------|------------------|-------------------|
-| Admin (équipe Cedra)             | InvoiceUp Plateforme  | Administrateur Cedra | `+221770000000` | `admin`           | `ChangeMoi123!`   |
-| PME (fournisseur)                | Senegal Fruits SARL   | Fatou Ndiaye   | `+221771111111` | `membre_pme`      | `Test1234!`       |
-| Acheteur (donneur d'ordre) — validateur 1 | Auchan Senegal | Ousmane Diop | `+221772222221` | `validateur_1`    | `Test1234!`       |
-| Acheteur (donneur d'ordre) — validateur 2 | Auchan Senegal | Aissatou Sow | `+221772222222` | `validateur_2`    | `Test1234!`       |
-| Partenaire financier             | Banque Atlantique     | Modou Gueye    | `+221773333333` | `agent_financier` | `Test1234!`       |
+Depuis la mise à jour de `/auth/login`, `identifiant` accepte indifféremment le
+téléphone ou l'email de la colonne correspondante (voir §3).
+
+| Partie                          | Entreprise           | Nom            | Téléphone       | Email                          | Rôle             | Mot de passe     |
+|----------------------------------|-----------------------|----------------|-----------------|---------------------------------|------------------|-------------------|
+| Admin (équipe Cedra)             | InvoiceUp Plateforme  | Administrateur Cedra | `+221770000000` | `admin@invoiceup.local`        | `admin`           | `ChangeMoi123!`   |
+| PME (fournisseur)                | Senegal Fruits SARL   | Fatou Ndiaye   | `+221771111111` | `fatou@senegalfruits.sn`       | `membre_pme`      | `Test1234!`       |
+| Acheteur (donneur d'ordre) — validateur 1 | Auchan Senegal | Ousmane Diop | `+221772222221` | `ousmane@auchan.sn`            | `validateur_1`    | `Test1234!`       |
+| Acheteur (donneur d'ordre) — validateur 2 | Auchan Senegal | Aissatou Sow | `+221772222222` | `aissatou@auchan.sn`           | `validateur_2`    | `Test1234!`       |
+| Partenaire financier             | Banque Atlantique     | Modou Gueye    | `+221773333333` | `modou@banqueatlantique.sn`    | `agent_financier` | `Test1234!`       |
 
 **Pourquoi deux comptes acheteur ?** La double validation d'une facture est systématique
 et sans seuil de montant : il faut toujours une validation `validateur_1` **et** une
