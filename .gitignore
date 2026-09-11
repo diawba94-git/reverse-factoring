@@ -16,4 +16,6 @@ services/backend/.pytest_cache/
 services/backend/.venv/
 services/frontend/dist/
 services/frontend/*.tsbuildinfo
+services/frontend/vite.config.js
+services/frontend/vite.config.d.ts
 
